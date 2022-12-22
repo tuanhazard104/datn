@@ -34,3 +34,7 @@ if __name__ == "__main__":
     torch.manual_seed(args.seed)
     torch.cuda.manual_seed(args.seed)
 
+    if args.model_name == "transunet":
+        from aiplatform.TransUNet.networks.vit_seg_modeling import VisionTransformer as ViT_seg
+        from aiplatform.TransUNet.networks.vit_seg_modeling import CONFIGS as CONFIGS_ViT_seg
+        from aiplatform.TransUNet.trainer import trainer_synapse
