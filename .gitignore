@@ -48,6 +48,8 @@ venv.bak/
 *.h5
 *.nii
 *.gz
+*.zip
+*.aiserver
 
 # Others
 __pycache__
