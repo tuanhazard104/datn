@@ -1,4 +1,4 @@
-aiplatform/
+
 temp/
 videos/
 runs/
@@ -42,6 +42,12 @@ venv.bak/
 *.pth
 *.pth.tar
 *.weights
+*.jpg
+*.png
+*.npz
+*.h5
+*.nii
+*.gz
 
 # Others
 __pycache__
