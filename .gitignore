@@ -4,6 +4,8 @@ videos/
 runs/
 model/
 weights/
+trained_model/
+test_log/
 *.engine
 __*/
 
