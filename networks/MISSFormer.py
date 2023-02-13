@@ -18,8 +18,9 @@ class PatchExpand(nn.Module):
         """
         # print("x_shape-----",x.shape)
         H, W = self.input_resolution
+        print("patch_expand: before linear x=",x.size())
         x = self.expand(x)
-        
+        print("patch_expand: after linear x=",x.size())
         B, L, C = x.shape
         # print(x.shape)
         assert L == H * W, "input feature has wrong size"
@@ -46,7 +47,9 @@ class FinalPatchExpand_X4(nn.Module):
         x: B, H*W, C
         """
         H, W = self.input_resolution
+        print("patch_expand: before linear x=",x.size())
         x = self.expand(x)
+        print("patch_expand: after linear x=",x.size())
         B, L, C = x.shape
         assert L == H * W, "input feature has wrong size"
 
@@ -367,18 +370,20 @@ class MISSFormer(nn.Module):
         self.reduction_ratios = [1, 2, 4, 8]
         self.bridge = BridegeBlock_4(64, 1, self.reduction_ratios)
 
-        self.decoder_3= MyDecoderLayer((d_base_feat_size,d_base_feat_size), in_out_chan[3], heads[3], reduction_ratios[3],token_mlp_mode, n_class=num_classes)
-        self.decoder_2= MyDecoderLayer((d_base_feat_size*2,d_base_feat_size*2),in_out_chan[2], heads[2], reduction_ratios[2], token_mlp_mode, n_class=num_classes)
-        self.decoder_1= MyDecoderLayer((d_base_feat_size*4,d_base_feat_size*4), in_out_chan[1], heads[1], reduction_ratios[1], token_mlp_mode, n_class=num_classes)
-        self.decoder_0= MyDecoderLayer((d_base_feat_size*8,d_base_feat_size*8), in_out_chan[0], heads[0], reduction_ratios[0], token_mlp_mode, n_class=num_classes, is_last=True)
+        self.decoder_3 = MyDecoderLayer((d_base_feat_size,d_base_feat_size), in_out_chan[3], heads[3], reduction_ratios[3],token_mlp_mode, n_class=num_classes)
+        self.decoder_2 = MyDecoderLayer((d_base_feat_size*2,d_base_feat_size*2),in_out_chan[2], heads[2], reduction_ratios[2], token_mlp_mode, n_class=num_classes)
+        self.decoder_1 = MyDecoderLayer((d_base_feat_size*4,d_base_feat_size*4), in_out_chan[1], heads[1], reduction_ratios[1], token_mlp_mode, n_class=num_classes)
+        self.decoder_0 = MyDecoderLayer((d_base_feat_size*8,d_base_feat_size*8), in_out_chan[0], heads[0], reduction_ratios[0], token_mlp_mode, n_class=num_classes, is_last=True)
 
         
     def forward(self, x):
         #---------------Encoder-------------------------
         if x.size()[1] == 1:
             x = x.repeat(1,3,1,1)
-
+        # print("before encoder:",x.size()) # torch.Size([2, 3, 224, 224])
         encoder = self.backbone(x)
+        # print(f"encoder[0]:{encoder[0].size()}, encoder[1]:{encoder[1].size()}, encoder[2]:{encoder[2].size()}, encoder[3]:{encoder[3].size()}")
+        ## encoder[0]:torch.Size([2, 64, 56, 56]), encoder[1]:torch.Size([2, 128, 28, 28]), encoder[2]:torch.Size([2, 320, 14, 14]), encoder[3]:torch.Size([2, 512, 7, 7])
         bridge = self.bridge(encoder) #list
 
         b,c,_,_ = bridge[3].shape

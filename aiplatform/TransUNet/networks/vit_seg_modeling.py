@@ -307,7 +307,9 @@ class DecoderBlock(nn.Module):
         self.up = nn.UpsamplingBilinear2d(scale_factor=2)
 
     def forward(self, x, skip=None):
+        print("before upsamling x=",x.size())
         x = self.up(x)
+        print("after upsampling: x=",x.size())
         if skip is not None:
             x = torch.cat([x, skip], dim=1)
         x = self.conv1(x)

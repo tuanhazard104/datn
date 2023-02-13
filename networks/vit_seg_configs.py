@@ -1,5 +1,6 @@
 import ml_collections
-
+import sys
+sys.path.append("E:/tai_lieu_hoc_tap/tdh/tuannca_datn")
 def get_b16_config():
     """Returns the ViT-B/16 configuration."""
     config = ml_collections.ConfigDict()
@@ -15,7 +16,7 @@ def get_b16_config():
     config.classifier = 'seg'
     config.representation_size = None
     config.resnet_pretrained_path = None
-    config.pretrained_path = 'aiplatform/project_TransUNet/model/vit_checkpoint/imagenet21k/R50+ViT-B_16.npz'
+    config.pretrained_path = 'pretrain_model/transunet/ViT-B_16.npz'
     config.patch_size = 16
 
     config.decoder_channels = (256, 128, 64, 16)
@@ -48,7 +49,7 @@ def get_r50_b16_config():
     config.resnet.width_factor = 1
 
     config.classifier = 'seg'
-    config.pretrained_path = 'trained_model/vit_checkpoint/imagenet21k/R50_ViT-B_16.npz'
+    config.pretrained_path = 'pretrain_model/transunet/R50_ViT-B_16.npz'
     config.decoder_channels = (256, 128, 64, 16)
     config.skip_channels = [512, 256, 64, 16]
     config.n_classes = 2

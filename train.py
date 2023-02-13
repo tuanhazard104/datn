@@ -71,14 +71,42 @@ if __name__ == "__main__":
     config_vit.n_skip = args.n_skip
         
     if args.model_name == "TransUNet":
+        print("pretrain path: ", config_vit.pretrained_path)
         net = ViT_seg(config_vit, img_size=args.img_size, num_classes=config_vit.n_classes).cuda()
         net.load_from(weights=np.load(config_vit.pretrained_path))
 
     elif args.model_name == "SegFormer":
+        # from aiplatform.segformer_lucid.segformer_pytorch.segformer_pytorch import Segformer
+        # net = Segformer(
+        #     dims = (32, 64, 160, 256),      # dimensions of each stage
+        #     heads = (1, 2, 5, 8),           # heads of each stage
+        #     ff_expansion = (8, 8, 4, 4),    # feedforward expansion factor of each stage
+        #     reduction_ratio = (8, 4, 2, 1), # reduction ratio of each stage for efficient attention
+        #     num_layers = 2,                 # num layers of each stage
+        #     decoder_dim = 256,              # decoder dimension
+        #     num_classes = args.num_classes                 # number of segmentation classes
+        # )
+
+
+
         net = SegFormer(num_classes=args.num_classes,image_size=args.img_size).cuda()
         # from aiplatform.segformer_pytorch.nets.segformer import SegFormer
         # net = SegFormer(num_classes=args.num_classes, phi="b0", pretrained=False)
-
+    elif args.model_name == "MISSFormer":
+        from networks.MISSFormer import MISSFormer
+        net = MISSFormer(num_classes=args.num_classes).cuda()
+    elif args.model_name == "SwinUNet":
+        from networks.swin_vision_transformer import SwinUnet
+        from aiplatform.Swin_Unet.config import get_config
+        args.cfg = "aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml"
+        config = get_config()
+        net = SwinUnet(config, img_size=args.img_size, num_classes=args.num_classes).cuda()
+    elif args.model_name == "pvtv2":
+        from aiplatform.pvtv2.pvtv2 import PyramidVisionTransformerV2 as PVT
+        net = PVT(num_classes=args.num_classes).cuda()
+    elif args.model_name == "MyNetworks":
+        from networks.my_networks import MyNetworks
+        net = MyNetworks(num_classes=args.num_classes).cuda()
     else:
         args.img_size = 128
         net = MedT(img_size = args.img_size, imgchan = 1, num_classes = args.num_classes).cuda()

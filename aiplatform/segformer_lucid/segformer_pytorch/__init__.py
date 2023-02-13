@@ -1,0 +1,1 @@
+from aiplatform.segformer_lucid.segformer_pytorch.segformer_pytorch import Segformer

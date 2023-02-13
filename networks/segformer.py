@@ -252,11 +252,19 @@ class MixD_FFN(nn.Module):
 class OverlapPatchEmbeddings(nn.Module):
     def __init__(self, img_size=224, patch_size=7, stride=4, padding=1, in_ch=3, dim=768):
         super().__init__()
+        self.in_ch = in_ch
+        self.patch_size = patch_size
+        self.stride = stride
+        self.padding = padding
+        self.dim = dim
+
         self.num_patches = (img_size // patch_size) ** 2
         self.proj = nn.Conv2d(in_ch, dim, patch_size, stride, padding)
         self.norm = nn.LayerNorm(dim)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        print(x.size())
+        print(f"before proj: in_ch = {self.in_ch}, dim = {self.dim}, patch_size = {self.patch_size}, stride = {self.stride}, padding = {self.padding}")
         px = self.proj(x)
         _, _, H, W = px.shape
         fx = px.flatten(2).transpose(1, 2)
@@ -338,6 +346,7 @@ class MiT(nn.Module):
         self.block1 = nn.ModuleList([
             TransformerBlock(dims[0], heads[0], reduction_ratios[0],token_mlp)
         for _ in range(layers[0])])
+        print("block1:\n", self.block1)
         self.norm1 = nn.LayerNorm(dims[0])
 
         self.block2 = nn.ModuleList([
@@ -361,13 +370,19 @@ class MiT(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         B = x.shape[0]
         outs = []
-
+        # print("before stage 1 encoder, x.size() = ", x.size()) # torch.Size([2, 3, 224, 224])
         # stage 1
         x, H, W = self.patch_embed1(x)
+        # print("after overlap patch embedding: x.size() = ", x.size()) # torch.Size([2, 3136, 32])
+        # print("len(blk1): ", len(self.block1)) # 2
         for blk in self.block1:
             x = blk(x, H, W)
+        # print("after blk: ", x.size()) # ([2, 3136, 32])
         x = self.norm1(x)
+        # print("after norm: ", x.size()) # ([2, 3136, 32])
+        print("after transformer: ", x.reshape(B, H, W, -1).size(), x.reshape(B, H, W, -1).permute(0, 3, 1, 2).size(),x.reshape(B, H, W, -1).permute(0, 3, 1, 2).contiguous().size())
         x = x.reshape(B, H, W, -1).permute(0, 3, 1, 2).contiguous()
+        # print("after stage 1, x.size() = ", x.size()) # ([2, 32, 56, 56])
         outs.append(x)
 
         # stage 2

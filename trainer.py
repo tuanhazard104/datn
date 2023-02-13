@@ -49,15 +49,17 @@ def trainer_synapse(args, model, snapshot_path):
     logging.info("{} iterations per epoch. {} max iterations ".format(len(trainloader), max_iterations))
     best_performance = 0.0
     iterator = tqdm(range(max_epoch), ncols=70)
-    print(trainloader)
+    # print(trainloader)
     for epoch_num in iterator:
         for i_batch, sampled_batch in enumerate(trainloader):
             image_batch, label_batch = sampled_batch['image'], sampled_batch['label']
             image_batch, label_batch = image_batch.cuda(), label_batch.cuda()
-            print("model input size: ",image_batch.size())
+            # print("model input size: ",image_batch.size())
             outputs = model(image_batch)
             if args.model_name == "SegFormer":
                 outputs = F.interpolate(outputs, size=label_batch.shape[1:], mode='bilinear', align_corners=False)
+            # print(outputs.size(), label_batch[:].long().size()) # torch.Size([2, 9, 256, 256]) torch.Size([2, 256, 256])
+            # print(outputs[3].size(), outputs[2].size(), outputs[1].size(), outputs[0].size()) # torch.Size([2, 512, 7, 7]) torch.Size([2, 256, 14, 14]) torch.Size([2, 128, 28, 28]) torch.Size([2, 64, 56, 56])
             loss_ce = ce_loss(outputs, label_batch[:].long())
             loss_dice = dice_loss(outputs, label_batch, softmax=True) #forward
             # print(label_batch.size())
@@ -74,7 +76,7 @@ def trainer_synapse(args, model, snapshot_path):
             writer.add_scalar('info/total_loss', loss, iter_num)
             writer.add_scalar('info/loss_ce', loss_ce, iter_num)
 
-            logging.info('iteration %d : loss : %f, loss_ce: %f' % (iter_num, loss.item(), loss_ce.item()))
+            logging.info('iteration %d : loss: %f, loss_ce: %f, loss dice: %f' % (iter_num, loss.item(), loss_ce.item(), loss_dice.item()))
 
             if iter_num % 20 == 0:
                 image = image_batch[1, 0:1, :, :]

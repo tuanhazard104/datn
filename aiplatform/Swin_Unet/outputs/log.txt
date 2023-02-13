@@ -1,0 +1,292 @@
+[14:48:53.529] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='./lists/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data/train_npz\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[14:51:14.809] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='./lists/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data/train_npz\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[14:51:30.424] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='./lists/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data/train_npz\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[14:52:28.777] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='./lists/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data/train_npz\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[14:52:57.331] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapsee', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data/train_npz\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[14:54:41.333] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapsee', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data/train_npz\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[14:55:25.471] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapsee', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data/train_npz\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[14:56:21.146] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapsee', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data/train_npz\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[14:58:56.573] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapsee', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data/train_npz\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[14:59:39.419] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapsee', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data/train_npz\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[15:00:03.252] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapsee', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data/train_npz\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[15:00:40.316] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data/train_npz\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[15:00:40.447] 1106 iterations per epoch. 165900 max iterations 
+[15:10:39.545] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data/train_npz\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[15:10:39.553] 1106 iterations per epoch. 165900 max iterations 
+[15:39:23.064] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data/train_npz\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[15:39:23.146] 1106 iterations per epoch. 165900 max iterations 
+[15:41:06.085] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data/train_npz\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[15:41:06.094] 1106 iterations per epoch. 165900 max iterations 
+[15:42:21.722] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data/train_npz\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[15:42:21.730] 1106 iterations per epoch. 165900 max iterations 
+[15:43:09.773] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[15:43:09.784] 1106 iterations per epoch. 165900 max iterations 
+[15:43:26.419] iteration 1 : loss : 1.449746, loss_ce: 2.270200
+[15:43:27.025] iteration 2 : loss : 1.391465, loss_ce: 2.028669
+[15:43:27.649] iteration 3 : loss : 1.237377, loss_ce: 1.671974
+[15:43:28.327] iteration 4 : loss : 1.048805, loss_ce: 1.244218
+[15:43:29.063] iteration 5 : loss : 0.889708, loss_ce: 0.907487
+[15:43:29.676] iteration 6 : loss : 0.711560, loss_ce: 0.430968
+[15:43:30.527] iteration 7 : loss : 0.733169, loss_ce: 0.517130
+[15:43:31.351] iteration 8 : loss : 0.588127, loss_ce: 0.135358
+[15:43:32.097] iteration 9 : loss : 0.675141, loss_ce: 0.373958
+[15:43:32.692] iteration 10 : loss : 0.698111, loss_ce: 0.415746
+[15:43:33.542] iteration 11 : loss : 0.547373, loss_ce: 0.034998
+[15:43:34.875] iteration 12 : loss : 0.565617, loss_ce: 0.081710
+[15:43:35.549] iteration 13 : loss : 0.540872, loss_ce: 0.018839
+[02:27:04.984] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[02:27:05.107] 1106 iterations per epoch. 165900 max iterations 
+[02:27:25.549] iteration 1 : loss : 1.449746, loss_ce: 2.270200
+[02:27:26.532] iteration 2 : loss : 1.391465, loss_ce: 2.028669
+[02:27:27.441] iteration 3 : loss : 1.237377, loss_ce: 1.671974
+[02:27:28.622] iteration 4 : loss : 1.048805, loss_ce: 1.244218
+[02:27:29.587] iteration 5 : loss : 0.889708, loss_ce: 0.907487
+[02:27:30.150] iteration 6 : loss : 0.711560, loss_ce: 0.430968
+[02:27:31.655] iteration 7 : loss : 0.733169, loss_ce: 0.517130
+[02:27:32.840] iteration 8 : loss : 0.588127, loss_ce: 0.135358
+[02:27:34.712] iteration 9 : loss : 0.675141, loss_ce: 0.373958
+[02:27:35.844] iteration 10 : loss : 0.698111, loss_ce: 0.415746
+[02:27:36.421] iteration 11 : loss : 0.547373, loss_ce: 0.034998
+[02:27:37.009] iteration 12 : loss : 0.565617, loss_ce: 0.081710
+[02:27:38.388] iteration 13 : loss : 0.540872, loss_ce: 0.018839
+[02:27:40.195] iteration 14 : loss : 0.541337, loss_ce: 0.020432
+[02:27:41.661] iteration 15 : loss : 0.547950, loss_ce: 0.036729
+[02:27:42.368] iteration 16 : loss : 0.760273, loss_ce: 0.563383
+[02:27:43.322] iteration 17 : loss : 0.569185, loss_ce: 0.089076
+[02:27:43.886] iteration 18 : loss : 0.999220, loss_ce: 1.152189
+[02:27:44.479] iteration 19 : loss : 0.781083, loss_ce: 0.614073
+[02:27:45.056] iteration 20 : loss : 0.733470, loss_ce: 0.496529
+[02:27:46.397] iteration 21 : loss : 0.760392, loss_ce: 0.563182
+[02:27:47.744] iteration 22 : loss : 0.545523, loss_ce: 0.030977
+[02:27:48.491] iteration 23 : loss : 0.551899, loss_ce: 0.046804
+[02:27:49.088] iteration 24 : loss : 0.627443, loss_ce: 0.234628
+[02:27:50.622] iteration 25 : loss : 0.543658, loss_ce: 0.026255
+[02:27:51.482] iteration 26 : loss : 0.936752, loss_ce: 0.998289
+[02:30:10.967] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[02:30:11.046] 1106 iterations per epoch. 165900 max iterations 
+[02:30:30.541] iteration 1 : loss : 1.449746, loss_ce: 2.270200
+[02:30:31.888] iteration 2 : loss : 1.391465, loss_ce: 2.028669
+[02:30:32.825] iteration 3 : loss : 1.237377, loss_ce: 1.671974
+[02:30:33.806] iteration 4 : loss : 1.048805, loss_ce: 1.244218
+[02:30:34.521] iteration 5 : loss : 0.889708, loss_ce: 0.907487
+[02:30:35.180] iteration 6 : loss : 0.711560, loss_ce: 0.430968
+[02:30:36.087] iteration 7 : loss : 0.733169, loss_ce: 0.517130
+[02:30:37.001] iteration 8 : loss : 0.588127, loss_ce: 0.135358
+[02:30:38.091] iteration 9 : loss : 0.675141, loss_ce: 0.373958
+[02:30:38.697] iteration 10 : loss : 0.698111, loss_ce: 0.415746
+[02:30:39.368] iteration 11 : loss : 0.547373, loss_ce: 0.034998
+[02:30:40.307] iteration 12 : loss : 0.565617, loss_ce: 0.081710
+[02:30:41.211] iteration 13 : loss : 0.540872, loss_ce: 0.018839
+[02:30:42.849] iteration 14 : loss : 0.541337, loss_ce: 0.020432
+[02:30:43.711] iteration 15 : loss : 0.547950, loss_ce: 0.036729
+[02:30:44.517] iteration 16 : loss : 0.760273, loss_ce: 0.563383
+[02:30:45.370] iteration 17 : loss : 0.569185, loss_ce: 0.089076
+[02:30:46.218] iteration 18 : loss : 0.999220, loss_ce: 1.152189
+[02:30:47.153] iteration 19 : loss : 0.781083, loss_ce: 0.614073
+[02:30:48.068] iteration 20 : loss : 0.733470, loss_ce: 0.496529
+[02:30:49.405] iteration 21 : loss : 0.760392, loss_ce: 0.563182
+[02:30:50.077] iteration 22 : loss : 0.545523, loss_ce: 0.030977
+[02:30:50.686] iteration 23 : loss : 0.551899, loss_ce: 0.046804
+[02:30:51.757] iteration 24 : loss : 0.627443, loss_ce: 0.234628
+[02:30:52.203] iteration 25 : loss : 0.543658, loss_ce: 0.026255
+[02:30:53.272] iteration 26 : loss : 0.936752, loss_ce: 0.998289
+[02:30:54.360] iteration 27 : loss : 0.658603, loss_ce: 0.311245
+[02:30:55.439] iteration 28 : loss : 0.610046, loss_ce: 0.192032
+[02:30:56.614] iteration 29 : loss : 0.618282, loss_ce: 0.211141
+[02:30:57.278] iteration 30 : loss : 0.620586, loss_ce: 0.217030
+[02:30:58.463] iteration 31 : loss : 0.734912, loss_ce: 0.506171
+[02:30:59.358] iteration 32 : loss : 0.605540, loss_ce: 0.182925
+[02:31:00.136] iteration 33 : loss : 0.583390, loss_ce: 0.126775
+[02:34:15.043] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[02:34:15.100] 1106 iterations per epoch. 165900 max iterations 
+[02:34:19.734] iteration 1 : loss : 1.449746, loss_ce: 2.270200
+[02:34:20.266] iteration 2 : loss : 1.391465, loss_ce: 2.028669
+[02:34:20.875] iteration 3 : loss : 1.237377, loss_ce: 1.671974
+[02:34:21.887] iteration 4 : loss : 1.048805, loss_ce: 1.244218
+[02:34:23.158] iteration 5 : loss : 0.889708, loss_ce: 0.907487
+[02:34:24.399] iteration 6 : loss : 0.711560, loss_ce: 0.430968
+[02:34:24.867] iteration 7 : loss : 0.733169, loss_ce: 0.517130
+[02:34:25.412] iteration 8 : loss : 0.588127, loss_ce: 0.135358
+[02:34:26.147] iteration 9 : loss : 0.675141, loss_ce: 0.373958
+[02:34:26.749] iteration 10 : loss : 0.698111, loss_ce: 0.415746
+[02:34:27.264] iteration 11 : loss : 0.547373, loss_ce: 0.034998
+[02:34:27.727] iteration 12 : loss : 0.565617, loss_ce: 0.081710
+[02:34:28.276] iteration 13 : loss : 0.540872, loss_ce: 0.018839
+[02:34:28.828] iteration 14 : loss : 0.541337, loss_ce: 0.020432
+[02:34:29.439] iteration 15 : loss : 0.547950, loss_ce: 0.036729
+[02:34:30.446] iteration 16 : loss : 0.760273, loss_ce: 0.563383
+[02:34:31.131] iteration 17 : loss : 0.569185, loss_ce: 0.089076
+[02:34:31.588] iteration 18 : loss : 0.999220, loss_ce: 1.152189
+[02:34:32.136] iteration 19 : loss : 0.781083, loss_ce: 0.614073
+[02:34:32.737] iteration 20 : loss : 0.733470, loss_ce: 0.496529
+[02:36:43.198] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[02:36:43.207] 1106 iterations per epoch. 165900 max iterations 
+[02:37:08.440] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[02:37:08.448] 1106 iterations per epoch. 165900 max iterations 
+[02:37:09.602] iteration 1 : loss : 1.449746, loss_ce: 2.270200
+[02:37:10.122] iteration 2 : loss : 1.391465, loss_ce: 2.028669
+[02:37:10.554] iteration 3 : loss : 1.237377, loss_ce: 1.671974
+[02:37:11.041] iteration 4 : loss : 1.048805, loss_ce: 1.244218
+[02:37:11.474] iteration 5 : loss : 0.889708, loss_ce: 0.907487
+[02:37:11.877] iteration 6 : loss : 0.711560, loss_ce: 0.430968
+[02:37:12.315] iteration 7 : loss : 0.733169, loss_ce: 0.517130
+[02:37:12.778] iteration 8 : loss : 0.588127, loss_ce: 0.135358
+[02:37:13.279] iteration 9 : loss : 0.675141, loss_ce: 0.373958
+[02:37:13.674] iteration 10 : loss : 0.698111, loss_ce: 0.415746
+[02:37:14.255] iteration 11 : loss : 0.547373, loss_ce: 0.034998
+[02:37:15.522] iteration 12 : loss : 0.565617, loss_ce: 0.081710
+[02:37:16.097] iteration 13 : loss : 0.540872, loss_ce: 0.018839
+[02:37:16.713] iteration 14 : loss : 0.541337, loss_ce: 0.020432
+[02:37:17.276] iteration 15 : loss : 0.547950, loss_ce: 0.036729
+[02:37:18.324] iteration 16 : loss : 0.760273, loss_ce: 0.563383
+[02:37:19.123] iteration 17 : loss : 0.569185, loss_ce: 0.089076
+[02:37:20.129] iteration 18 : loss : 0.999220, loss_ce: 1.152189
+[02:37:21.093] iteration 19 : loss : 0.781083, loss_ce: 0.614073
+[02:37:22.653] iteration 20 : loss : 0.733470, loss_ce: 0.496529
+[02:41:53.829] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[02:41:53.838] 1106 iterations per epoch. 165900 max iterations 
+[02:42:21.212] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[02:42:21.221] 1106 iterations per epoch. 165900 max iterations 
+[02:42:22.323] iteration 1 : loss : 1.449746, loss_ce: 2.270200
+[02:42:22.560] iteration 2 : loss : 1.391465, loss_ce: 2.028669
+[02:42:22.795] iteration 3 : loss : 1.237377, loss_ce: 1.671974
+[02:42:23.061] iteration 4 : loss : 1.048805, loss_ce: 1.244218
+[02:42:23.371] iteration 5 : loss : 0.889708, loss_ce: 0.907487
+[02:42:23.628] iteration 6 : loss : 0.711560, loss_ce: 0.430968
+[02:42:23.902] iteration 7 : loss : 0.733169, loss_ce: 0.517130
+[02:42:24.185] iteration 8 : loss : 0.588127, loss_ce: 0.135358
+[02:42:24.571] iteration 9 : loss : 0.675141, loss_ce: 0.373958
+[02:42:24.838] iteration 10 : loss : 0.698111, loss_ce: 0.415746
+[02:43:14.410] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[02:43:14.419] 1106 iterations per epoch. 165900 max iterations 
+[02:43:15.575] iteration 1 : loss : 1.449746, loss_ce: 2.270200
+[02:43:15.819] iteration 2 : loss : 1.391465, loss_ce: 2.028669
+[02:43:16.073] iteration 3 : loss : 1.237377, loss_ce: 1.671974
+[02:43:16.358] iteration 4 : loss : 1.048805, loss_ce: 1.244218
+[02:43:16.644] iteration 5 : loss : 0.889708, loss_ce: 0.907487
+[02:43:16.910] iteration 6 : loss : 0.711560, loss_ce: 0.430968
+[02:43:17.230] iteration 7 : loss : 0.733169, loss_ce: 0.517130
+[02:43:17.552] iteration 8 : loss : 0.588127, loss_ce: 0.135358
+[02:50:46.868] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[02:50:46.877] 1106 iterations per epoch. 165900 max iterations 
+[02:50:48.031] iteration 1 : loss : 1.449746, loss_ce: 2.270200
+[02:50:48.295] iteration 2 : loss : 1.391465, loss_ce: 2.028669
+[02:50:48.536] iteration 3 : loss : 1.237377, loss_ce: 1.671974
+[02:50:48.815] iteration 4 : loss : 1.048805, loss_ce: 1.244218
+[02:50:49.137] iteration 5 : loss : 0.889708, loss_ce: 0.907487
+[02:50:49.414] iteration 6 : loss : 0.711560, loss_ce: 0.430968
+[02:50:49.691] iteration 7 : loss : 0.733169, loss_ce: 0.517130
+[02:50:50.024] iteration 8 : loss : 0.588127, loss_ce: 0.135358
+[02:50:50.380] iteration 9 : loss : 0.675141, loss_ce: 0.373958
+[02:50:50.652] iteration 10 : loss : 0.698111, loss_ce: 0.415746
+[02:50:50.983] iteration 11 : loss : 0.547373, loss_ce: 0.034998
+[02:51:11.850] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[02:51:11.858] 1106 iterations per epoch. 165900 max iterations 
+[02:51:13.016] iteration 1 : loss : 1.449746, loss_ce: 2.270200
+[02:51:13.290] iteration 2 : loss : 1.391465, loss_ce: 2.028669
+[02:51:13.579] iteration 3 : loss : 1.237377, loss_ce: 1.671974
+[02:51:13.846] iteration 4 : loss : 1.048805, loss_ce: 1.244218
+[02:51:14.153] iteration 5 : loss : 0.889708, loss_ce: 0.907487
+[02:51:14.405] iteration 6 : loss : 0.711560, loss_ce: 0.430968
+[02:51:14.732] iteration 7 : loss : 0.733169, loss_ce: 0.517130
+[02:51:15.062] iteration 8 : loss : 0.588127, loss_ce: 0.135358
+[02:51:15.407] iteration 9 : loss : 0.675141, loss_ce: 0.373958
+[02:51:15.670] iteration 10 : loss : 0.698111, loss_ce: 0.415746
+[02:52:36.730] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[02:52:36.740] 1106 iterations per epoch. 165900 max iterations 
+[02:52:37.986] iteration 1 : loss : 1.449746, loss_ce: 2.270200
+[02:52:38.237] iteration 2 : loss : 1.391465, loss_ce: 2.028669
+[02:52:38.489] iteration 3 : loss : 1.237377, loss_ce: 1.671974
+[02:52:38.796] iteration 4 : loss : 1.048805, loss_ce: 1.244218
+[02:52:39.104] iteration 5 : loss : 0.889708, loss_ce: 0.907487
+[02:52:39.354] iteration 6 : loss : 0.711560, loss_ce: 0.430968
+[02:52:39.672] iteration 7 : loss : 0.733169, loss_ce: 0.517130
+[02:52:40.017] iteration 8 : loss : 0.588127, loss_ce: 0.135358
+[02:53:35.044] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[02:53:35.053] 1106 iterations per epoch. 165900 max iterations 
+[02:53:36.187] iteration 1 : loss : 1.449746, loss_ce: 2.270200
+[02:53:36.439] iteration 2 : loss : 1.391465, loss_ce: 2.028669
+[02:53:36.685] iteration 3 : loss : 1.237377, loss_ce: 1.671974
+[02:53:37.021] iteration 4 : loss : 1.048805, loss_ce: 1.244218
+[02:53:37.346] iteration 5 : loss : 0.889708, loss_ce: 0.907487
+[02:53:37.606] iteration 6 : loss : 0.711560, loss_ce: 0.430968
+[02:53:37.879] iteration 7 : loss : 0.733169, loss_ce: 0.517130
+[02:53:38.232] iteration 8 : loss : 0.588127, loss_ce: 0.135358
+[22:44:06.529] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[22:44:06.718] 1106 iterations per epoch. 165900 max iterations 
+[22:44:33.146] iteration 1 : loss : 1.449746, loss_ce: 2.270200
+[22:44:34.243] iteration 2 : loss : 1.391465, loss_ce: 2.028669
+[22:44:34.789] iteration 3 : loss : 1.237377, loss_ce: 1.671974
+[22:44:35.885] iteration 4 : loss : 1.048805, loss_ce: 1.244218
+[22:44:36.467] iteration 5 : loss : 0.889708, loss_ce: 0.907487
+[22:44:37.022] iteration 6 : loss : 0.711560, loss_ce: 0.430968
+[22:44:38.540] iteration 7 : loss : 0.733169, loss_ce: 0.517130
+[22:44:40.125] iteration 8 : loss : 0.588127, loss_ce: 0.135358
+[22:44:40.838] iteration 9 : loss : 0.675141, loss_ce: 0.373958
+[22:44:41.883] iteration 10 : loss : 0.698111, loss_ce: 0.415746
+[22:44:43.501] iteration 11 : loss : 0.547373, loss_ce: 0.034998
+[22:44:44.536] iteration 12 : loss : 0.565617, loss_ce: 0.081710
+[22:44:45.047] iteration 13 : loss : 0.540872, loss_ce: 0.018839
+[22:44:45.779] iteration 14 : loss : 0.541337, loss_ce: 0.020432
+[22:44:46.701] iteration 15 : loss : 0.547950, loss_ce: 0.036729
+[22:44:47.157] iteration 16 : loss : 0.760273, loss_ce: 0.563383
+[22:44:47.705] iteration 17 : loss : 0.569185, loss_ce: 0.089076
+[22:44:48.320] iteration 18 : loss : 0.999220, loss_ce: 1.152189
+[22:44:49.881] iteration 19 : loss : 0.781083, loss_ce: 0.614073
+[22:44:50.732] iteration 20 : loss : 0.733470, loss_ce: 0.496529
+[22:44:52.899] iteration 21 : loss : 0.760392, loss_ce: 0.563182
+[22:44:53.639] iteration 22 : loss : 0.545523, loss_ce: 0.030977
+[22:44:54.414] iteration 23 : loss : 0.551899, loss_ce: 0.046804
+[22:44:55.324] iteration 24 : loss : 0.627443, loss_ce: 0.234628
+[22:44:56.094] iteration 25 : loss : 0.543658, loss_ce: 0.026255
+[22:44:56.635] iteration 26 : loss : 0.936752, loss_ce: 0.998289
+[22:44:57.932] iteration 27 : loss : 0.658603, loss_ce: 0.311245
+[22:44:58.516] iteration 28 : loss : 0.610046, loss_ce: 0.192032
+[22:44:59.105] iteration 29 : loss : 0.618282, loss_ce: 0.211141
+[22:45:00.605] iteration 30 : loss : 0.620586, loss_ce: 0.217030
+[22:45:02.281] iteration 31 : loss : 0.734912, loss_ce: 0.506171
+[22:45:03.458] iteration 32 : loss : 0.605540, loss_ce: 0.182925
+[22:45:04.581] iteration 33 : loss : 0.583390, loss_ce: 0.126775
+[22:45:05.144] iteration 34 : loss : 0.663856, loss_ce: 0.336302
+[22:45:05.662] iteration 35 : loss : 0.583516, loss_ce: 0.135013
+[22:45:07.310] iteration 36 : loss : 0.574752, loss_ce: 0.109727
+[22:45:08.820] iteration 37 : loss : 0.607754, loss_ce: 0.195665
+[22:45:09.529] iteration 38 : loss : 0.702404, loss_ce: 0.427472
+[22:45:10.330] iteration 39 : loss : 0.642712, loss_ce: 0.279838
+[23:26:42.446] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[23:26:42.515] 1106 iterations per epoch. 165900 max iterations 
+[23:26:53.182] iteration 1 : loss : 1.449746, loss_ce: 2.270200
+[23:26:53.777] iteration 2 : loss : 1.391465, loss_ce: 2.028669
+[23:26:54.206] iteration 3 : loss : 1.237377, loss_ce: 1.671974
+[23:26:54.929] iteration 4 : loss : 1.048805, loss_ce: 1.244218
+[23:26:56.103] iteration 5 : loss : 0.889708, loss_ce: 0.907487
+[23:26:56.725] iteration 6 : loss : 0.711560, loss_ce: 0.430968
+[23:30:02.958] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[23:30:02.967] 1106 iterations per epoch. 165900 max iterations 
+[23:30:04.299] iteration 1 : loss : 1.449746, loss_ce: 2.270200
+[23:30:04.580] iteration 2 : loss : 1.391465, loss_ce: 2.028669
+[23:30:04.845] iteration 3 : loss : 1.237377, loss_ce: 1.671974
+[23:30:05.138] iteration 4 : loss : 1.048805, loss_ce: 1.244218
+[23:30:05.448] iteration 5 : loss : 0.889708, loss_ce: 0.907487
+[23:30:05.746] iteration 6 : loss : 0.711560, loss_ce: 0.430968
+[23:30:06.228] iteration 7 : loss : 0.733169, loss_ce: 0.517130
+[23:50:02.622] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[23:50:03.903] 1106 iterations per epoch. 165900 max iterations 
+[23:50:22.431] iteration 1 : loss : 1.449746, loss_ce: 2.270200
+[23:50:23.153] iteration 2 : loss : 1.391465, loss_ce: 2.028669
+[23:50:23.740] iteration 3 : loss : 1.237377, loss_ce: 1.671974
+[23:50:25.343] iteration 4 : loss : 1.048805, loss_ce: 1.244218
+[23:50:26.057] iteration 5 : loss : 0.889708, loss_ce: 0.907487
+[23:50:27.741] iteration 6 : loss : 0.711560, loss_ce: 0.430968
+[23:50:28.470] iteration 7 : loss : 0.733169, loss_ce: 0.517130
+[23:50:29.276] iteration 8 : loss : 0.588127, loss_ce: 0.135358
+[23:50:30.024] iteration 9 : loss : 0.675141, loss_ce: 0.373958
+[23:50:30.942] iteration 10 : loss : 0.698111, loss_ce: 0.415746
+[23:50:31.738] iteration 11 : loss : 0.547373, loss_ce: 0.034998
+[00:36:08.562] Namespace(accumulation_steps=None, amp_opt_level='O1', base_lr=0.01, batch_size=2, cache_mode='part', cfg='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml', dataset='Synapse', deterministic=1, eval=False, img_size=224, list_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/lists_Synapse', max_epochs=150, max_iterations=30000, n_gpu=1, num_classes=9, opts=None, output_dir='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs', resume=None, root_path='E:/tai_lieu_hoc_tap/tdh/tuannca_datn/datasets/raw_data\\train_npz', seed=1234, tag=None, throughput=False, use_checkpoint=False, zip=False)
+[00:36:08.601] 1106 iterations per epoch. 165900 max iterations 
+[00:36:13.582] iteration 1 : loss : 1.449746, loss_ce: 2.270200
+[00:36:14.177] iteration 2 : loss : 1.391465, loss_ce: 2.028669
+[00:36:14.614] iteration 3 : loss : 1.237377, loss_ce: 1.671974
+[00:36:15.197] iteration 4 : loss : 1.048805, loss_ce: 1.244218
+[00:36:15.788] iteration 5 : loss : 0.889708, loss_ce: 0.907487

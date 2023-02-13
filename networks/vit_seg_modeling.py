@@ -128,40 +128,58 @@ class Embeddings(nn.Module):
         self.config = config
         img_size = _pair(img_size)
 
+        position_embeddings_debug = nn.Parameter(torch.zeros(1, 0, config.hidden_size))
+        print("posotion embeddings debug: ",position_embeddings_debug.size())
+
         if config.patches.get("grid") is not None:   # ResNet
             grid_size = config.patches["grid"]
-            patch_size = (img_size[0] // 16 // grid_size[0], img_size[1] // 16 // grid_size[1])
+            # print("img_size", img_size) # (256,256)
+            # print("grid_size", grid_size) # (16,16)
+            patch_size = (img_size[0] // 16 // grid_size[0], img_size[1] // 16 // grid_size[1]) # (1,1)
             patch_size_real = (patch_size[0] * 16, patch_size[1] * 16)
-            n_patches = (img_size[0] // patch_size_real[0]) * (img_size[1] // patch_size_real[1])  
+            n_patches = (img_size[0] // patch_size_real[0]) * (img_size[1] // patch_size_real[1]) # img_size error!
+            # print("n_patches: ", n_patches) # 256
             self.hybrid = True
         else:
             patch_size = _pair(config.patches["size"])
             n_patches = (img_size[0] // patch_size[0]) * (img_size[1] // patch_size[1])
             self.hybrid = False
-
+        
         if self.hybrid:
             self.hybrid_model = ResNetV2(block_units=config.resnet.num_layers, width_factor=config.resnet.width_factor)
-            in_channels = self.hybrid_model.width * 16
+            print("RESNET V2: block_units, width_factor",config.resnet.num_layers,config.resnet.width_factor)
+            in_channels = self.hybrid_model.width * 16 # 64*16=1024
+        # inchannels: 1024, out_channels: 768, kernel_size: (1, 1), stride: (1, 1)
+        # self.patch_size = patch_size
+        print("INIT before patch_embedding: ", in_channels, config.hidden_size, patch_size)
         self.patch_embeddings = Conv2d(in_channels=in_channels,
                                        out_channels=config.hidden_size,
                                        kernel_size=patch_size,
                                        stride=patch_size)
+        
         self.position_embeddings = nn.Parameter(torch.zeros(1, n_patches, config.hidden_size))
-
+        # print(self.position_embeddings.size()) # torch.Size([1, 256, 768])
+        print("dropour rate:",config.transformer["dropout_rate"])
         self.dropout = Dropout(config.transformer["dropout_rate"])
 
 
     def forward(self, x):
+        # print(">>>>>>>>>>>>>>>>>>>>\n", self.hybrid) # True
+        # print("before hybrid: x.size() = ", x.size()) # (2,3,256,256)
         if self.hybrid:
+            # print("HYBRID")
             x, features = self.hybrid_model(x)
         else:
             features = None
+        # print("after hybrid/before path_embedding: x.size() = ", x.size()) # (2,1024,16,16)
         x = self.patch_embeddings(x)  # (B, hidden. n_patches^(1/2), n_patches^(1/2))
+        # print("after path_embedding: x.size() = ", x.size()) # (2,768,16,16)
         x = x.flatten(2)
         x = x.transpose(-1, -2)  # (B, n_patches, hidden)
-
+        # print("size of position_embeddings: ", self.position_embeddings.size()) # [1, 256, 768]
         embeddings = x + self.position_embeddings
         embeddings = self.dropout(embeddings)
+        # print("after embeddings class: embeddings.size() = ", embeddings.size()) # (2,256,768)
         return embeddings, features
 
 
@@ -189,15 +207,16 @@ class Block(nn.Module):
     def load_from(self, weights, n_block):
         ROOT = f"Transformer/encoderblock_{n_block}"
         with torch.no_grad():
-            query_weight = np2th(weights[pjoin(ROOT, ATTENTION_Q, "kernel")]).view(self.hidden_size, self.hidden_size).t()
-            key_weight = np2th(weights[pjoin(ROOT, ATTENTION_K, "kernel")]).view(self.hidden_size, self.hidden_size).t()
-            value_weight = np2th(weights[pjoin(ROOT, ATTENTION_V, "kernel")]).view(self.hidden_size, self.hidden_size).t()
-            out_weight = np2th(weights[pjoin(ROOT, ATTENTION_OUT, "kernel")]).view(self.hidden_size, self.hidden_size).t()
+            replace_query_weight = ROOT + "/" + ATTENTION_Q + "/" + "kernel" # pjoin(ROOT, ATTENTION_Q, "kernel")
+            query_weight = np2th(weights[replace_query_weight]).view(self.hidden_size, self.hidden_size).t()
+            key_weight = np2th(weights[ROOT +"/" + ATTENTION_K +"/" + "kernel"]).view(self.hidden_size, self.hidden_size).t()
+            value_weight = np2th(weights[ROOT +"/" + ATTENTION_V +"/" + "kernel"]).view(self.hidden_size, self.hidden_size).t()
+            out_weight = np2th(weights[ROOT +"/" + ATTENTION_OUT +"/" + "kernel"]).view(self.hidden_size, self.hidden_size).t()
 
-            query_bias = np2th(weights[pjoin(ROOT, ATTENTION_Q, "bias")]).view(-1)
-            key_bias = np2th(weights[pjoin(ROOT, ATTENTION_K, "bias")]).view(-1)
-            value_bias = np2th(weights[pjoin(ROOT, ATTENTION_V, "bias")]).view(-1)
-            out_bias = np2th(weights[pjoin(ROOT, ATTENTION_OUT, "bias")]).view(-1)
+            query_bias = np2th(weights[ROOT +"/" + ATTENTION_Q +"/" + "bias"]).view(-1)
+            key_bias = np2th(weights[ROOT +"/" + ATTENTION_K +"/" + "bias"]).view(-1)
+            value_bias = np2th(weights[ROOT +"/" + ATTENTION_V +"/" + "bias"]).view(-1)
+            out_bias = np2th(weights[ROOT +"/" + ATTENTION_OUT +"/" + "bias"]).view(-1)
 
             self.attn.query.weight.copy_(query_weight)
             self.attn.key.weight.copy_(key_weight)
@@ -208,20 +227,20 @@ class Block(nn.Module):
             self.attn.value.bias.copy_(value_bias)
             self.attn.out.bias.copy_(out_bias)
 
-            mlp_weight_0 = np2th(weights[pjoin(ROOT, FC_0, "kernel")]).t()
-            mlp_weight_1 = np2th(weights[pjoin(ROOT, FC_1, "kernel")]).t()
-            mlp_bias_0 = np2th(weights[pjoin(ROOT, FC_0, "bias")]).t()
-            mlp_bias_1 = np2th(weights[pjoin(ROOT, FC_1, "bias")]).t()
+            mlp_weight_0 = np2th(weights[ROOT +"/" + FC_0 +"/" + "kernel"]).t()
+            mlp_weight_1 = np2th(weights[ROOT +"/" + FC_1 +"/" + "kernel"]).t()
+            mlp_bias_0 = np2th(weights[ROOT +"/" + FC_0 +"/" + "bias"]).t()
+            mlp_bias_1 = np2th(weights[ROOT +"/" + FC_1 +"/" + "bias"]).t()
 
             self.ffn.fc1.weight.copy_(mlp_weight_0)
             self.ffn.fc2.weight.copy_(mlp_weight_1)
             self.ffn.fc1.bias.copy_(mlp_bias_0)
             self.ffn.fc2.bias.copy_(mlp_bias_1)
 
-            self.attention_norm.weight.copy_(np2th(weights[pjoin(ROOT, ATTENTION_NORM, "scale")]))
-            self.attention_norm.bias.copy_(np2th(weights[pjoin(ROOT, ATTENTION_NORM, "bias")]))
-            self.ffn_norm.weight.copy_(np2th(weights[pjoin(ROOT, MLP_NORM, "scale")]))
-            self.ffn_norm.bias.copy_(np2th(weights[pjoin(ROOT, MLP_NORM, "bias")]))
+            self.attention_norm.weight.copy_(np2th(weights[ROOT +"/" + ATTENTION_NORM +"/" + "scale"]))
+            self.attention_norm.bias.copy_(np2th(weights[ROOT +"/" + ATTENTION_NORM +"/" + "bias"]))
+            self.ffn_norm.weight.copy_(np2th(weights[ROOT +"/" + MLP_NORM +"/" + "scale"]))
+            self.ffn_norm.bias.copy_(np2th(weights[ROOT +"/" + MLP_NORM +"/" + "bias"]))
 
 
 class Encoder(nn.Module):
@@ -233,14 +252,20 @@ class Encoder(nn.Module):
         for _ in range(config.transformer["num_layers"]):
             layer = Block(config, vis)
             self.layer.append(copy.deepcopy(layer))
+        print("Encoder Layer:\n",self.layer)
 
     def forward(self, hidden_states):
+        # print("hidden states: ", hidden_states.size()) # torch.Size([2, 256, 768])
         attn_weights = []
+        # print("self.layer length: ", len(self.layer)) # 12
         for layer_block in self.layer:
             hidden_states, weights = layer_block(hidden_states)
             if self.vis:
                 attn_weights.append(weights)
+        # print("before encoder_norm: ", hidden_states.size()) # torch.Size([2, 256, 768])
         encoded = self.encoder_norm(hidden_states)
+        # print("encoded: ", encoded.size()) # torch.Size([2, 256, 768])
+        # print("attn_weights: ", len(attn_weights)) # 0
         return encoded, attn_weights
 
 
@@ -252,7 +277,9 @@ class Transformer(nn.Module):
 
     def forward(self, input_ids):
         embedding_output, features = self.embeddings(input_ids)
+        # print("before encodeing: embedding_output = ", embedding_output.size()) # ([2, 256, 768])
         encoded, attn_weights = self.encoder(embedding_output)  # (B, n_patch, hidden)
+        # print(f"features[0]: {features[0].size()}, features[1]: {features[1].size()}, features[2]: {features[2].size()}") # (2,512,32,32), (2,256,64,64), (2,64,128,128)
         return encoded, attn_weights, features
 
 
@@ -307,11 +334,17 @@ class DecoderBlock(nn.Module):
         self.up = nn.UpsamplingBilinear2d(scale_factor=2)
 
     def forward(self, x, skip=None):
+        # print("before upsamling: x=",x.size()) # torch.Size([2, 512, 16, 16])
         x = self.up(x)
+        # print("after upsampling: x=",x.size()) # torch.Size([2, 512, 32, 32])
         if skip is not None:
+            # print(f"before cat: x={x.size()}, skip={skip.size()}") #  x=torch.Size([2, 512, 32, 32]), skip=torch.Size([2, 512, 32, 32])
             x = torch.cat([x, skip], dim=1)
+            # print("after cat:",x.size()) # torch.Size([2, 1024, 32, 32])
         x = self.conv1(x)
+        # print("after conv1:",x.size()) # torch.Size([2, 128, 64, 64])
         x = self.conv2(x)
+        # print("after conv2:",x.size()) # torch.Size([2, 128, 64, 64])
         return x
 
 
@@ -386,7 +419,9 @@ class VisionTransformer(nn.Module):
         if x.size()[1] == 1:
             x = x.repeat(1,3,1,1)
         x, attn_weights, features = self.transformer(x)  # (B, n_patch, hidden)
+        # print("after transformer: ", x.size()) # torch.Size([2, 256, 768])
         x = self.decoder(x, features)
+        # print("after decoder: ", x.size()) # torch.Size([2, 16, 256, 256])
         logits = self.segmentation_head(x)
         return logits
 
