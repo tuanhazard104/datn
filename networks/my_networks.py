@@ -13,20 +13,55 @@ from aiplatform.pvtv2.pvtv2 import PyramidVisionTransformerV2 as PVT
 from aiplatform.pvtv2.pvtv2 import OverlapPatchEmbed
 # from aiplatform.Swin_Unet.networks.swin_transformer_unet_skip_expand_decoder_sys import 
 
-class PatchExpand(nn.Module):
+class DownDimension(nn.Module):
     def __init__(self,ch_in,ch_out):
-        super(PatchExpand,self).__init__()
-        self.up = nn.Sequential(
-            nn.Upsample(scale_factor=2),
+        super(DownDimension,self).__init__()
+        self.ch_in = ch_in
+        self.ch_out = ch_out
+        self.down = nn.Sequential(
             nn.Conv2d(ch_in,ch_out,kernel_size=3,stride=1,padding=1,bias=True),
 		    nn.BatchNorm2d(ch_out),
 			nn.ReLU(inplace=True)
         )
+    def forward(self,x):
+        x = self.down(x)
+        return x
+
+
+class PatchExpand(nn.Module):
+    def __init__(self,ch_in,ch_out, final=False):
+        super(PatchExpand,self).__init__()
+        self.ch_in = ch_in
+        self.ch_out = ch_out
+        self.final = final
+        # self.up = nn.Sequential(
+        #     nn.Upsample(scale_factor=2),
+        #     nn.Conv2d(ch_in,ch_out,kernel_size=3,stride=1,padding=1,bias=True),
+		#     nn.BatchNorm2d(ch_out),
+		# 	nn.ReLU(inplace=True)
+        # )
+        # self.upX2 = nn.Upsample(scale_factor=2)
+        if final:
+            self.upX2 =  nn.UpsamplingBilinear2d(scale_factor=2)
+        else:
+            self.upX2 =  nn.UpsamplingBilinear2d(scale_factor=2)
+        self.conv = nn.Conv2d(self.ch_in,self.ch_out,kernel_size=3,stride=1,padding=1,bias=True)
+        self.bn = nn.BatchNorm2d(self.ch_out)
+        self.relu = nn.ReLU(inplace=True)
 
     def forward(self,x):
-        x = self.up(x)
+        # x = self.up(x)
+        x = self.upX2(x)
+        # print("after upsample:",x.size())
+        x = self.conv(x)
+        # print("after conv:",x.size())
+        x = self.bn(x)
+        x = self.relu(x)
+        # print("after relu:",x.size())
         _,_,H,W = x.shape
-        x = x.flatten(2).transpose(1, 2)
+        if not self.final:
+            x = x.flatten(2).transpose(1, 2)
+        # print("after flatten:",x.size())
         return x,H,W
 
 class MyBlock(nn.Module):
@@ -90,6 +125,7 @@ class MyDecoder(nn.Module):
         self.patch_expand2 = PatchExpand(ch_in=256, ch_out=128)
         self.patch_expand3 = PatchExpand(ch_in=128, ch_out=64)
         self.patch_expand4 = PatchExpand(ch_in=64, ch_out=32)
+        self.patch_expand_final = PatchExpand(ch_in=32, ch_out=32, final=True)
 
         self.block1 = nn.ModuleList([Block(
             dim=embed_dims[-2],
@@ -101,9 +137,9 @@ class MyDecoder(nn.Module):
             attn_drop=0.,
             drop_path=0.,
             norm_layer=nn.LayerNorm,
-            sr_ratio=sr_ratios[-2],
+            sr_ratio=sr_ratios[-1],
             linear=False
-        ) for j in range(depths[-2])])
+        ) for j in range(2)])
 
         self.block2 = nn.ModuleList([Block(
             dim=embed_dims[-3],
@@ -117,7 +153,7 @@ class MyDecoder(nn.Module):
             norm_layer=nn.LayerNorm,
             sr_ratio=sr_ratios[-3],
             linear=False
-        ) for j in range(depths[-3])])
+        ) for j in range(2)])
 
         self.block3 = nn.ModuleList([Block(
             dim=embed_dims[-4],
@@ -131,37 +167,94 @@ class MyDecoder(nn.Module):
             norm_layer=nn.LayerNorm,
             sr_ratio=sr_ratios[-4],
             linear=False
-        ) for j in range(depths[-4])])
+        ) for j in range(2)])
 
-    def forward(self, x):
-        B=x.shape[0]
+        self.block4 = nn.ModuleList([Block(
+            dim=32,
+            num_heads=1,
+            mlp_ratio=4,
+            qkv_bias=False,
+            qk_scale=None,
+            drop=0.,
+            attn_drop=0.,
+            drop_path=0.,
+            norm_layer=nn.LayerNorm,
+            sr_ratio=sr_ratios[-4],
+            linear=False
+        ) for j in range(2)])
+
+        self.down_dim_512_256 = DownDimension(ch_in=512, ch_out=256)
+        self.down_dim_256_128 = DownDimension(ch_in=256, ch_out=128)
+        self.down_dim_128_64 = DownDimension(ch_in=128, ch_out=64)
+
+    def forward(self, features):
+        B=features[0].shape[0]
         # print(self.block1)
         # stage 1
-        # print("stage1: x=",x.size())
-        x,H,W = self.patch_expand1(x)
-        print("stage1: after expand x=",x.size())
+        # print("stage1: before expand x=",x.size()) # torch.Size([2, 512, 7, 7])
+        x,H,W = self.patch_expand1(features[-1])
+        # print("stage1: after expand x=",x.size()) # torch.Size([2, 49, 256])
         for blk in self.block1:
-            print("qqqqq",x.size())
             x=blk(x,H,W)
-        x = x.reshape(B, H, W, -1).permute(0, 3, 1, 2).contiguous()
-        # print("stage1: after block x=",x.size())
+        x = x.reshape(B, H, W, -1).permute(0, 3, 1, 2).contiguous() 
+        # print("stage1: after block x=",x.size()) # torch.Size([2, 256, 14, 14])
+        x = torch.cat([x, features[-2]], dim=1) # torch.Size([2, 512, 14, 14])
+        x = self.down_dim_512_256(x)
+        # print("after down dimension:",x.size()) # torch.Size([2, 256, 14, 14])
+
         # stage 2
         x,H,W = self.patch_expand2(x)
         for blk in self.block2:
-            print("qqqqq2",x.size())
             x=blk(x,H,W)
         x = x.reshape(B, H, W, -1).permute(0, 3, 1, 2).contiguous()
+        x = torch.cat([x, features[-3]], dim=1)
+        x = self.down_dim_256_128(x)
+        # print("after down dimension:",x.size()) # torch.Size([2, 128, 28, 28])
+        
         # stage 3
         x,H,W = self.patch_expand3(x)
         for blk in self.block3:
             x=blk(x,H,W)
         x = x.reshape(B, H, W, -1).permute(0, 3, 1, 2).contiguous()
+        x = torch.cat([x, features[-4]], dim=1) # 128,56,56
+        x = self.down_dim_128_64(x) # 64,56,56
+
+        # stage 4
+        x, H,W = self.patch_expand4(x)
+        for blk in self.block4:
+            x=blk(x,H,W)
+        x = x.reshape(B, H, W, -1).permute(0, 3, 1, 2).contiguous()
+        
+        x,H,W = self.patch_expand_final(x)
+        # print("final:",x.size()) # torch.Size([2, 32, 224, 224])
         return x
 
-            
+class SegmentationHead(nn.Module):
+    def __init__(self, num_classes=9):
+        super(SegmentationHead, self).__init__()
+        self.up_dimention = nn.Sequential(
+            nn.Conv2d(3,32,kernel_size=3,stride=1,padding=1,bias=True),
+		    nn.BatchNorm2d(32),
+			nn.ReLU(inplace=True)
+        )
+
+        self.conv = nn.Sequential(
+            nn.Conv2d(64,64,kernel_size=3,stride=1,padding=1,bias=True),
+		    nn.BatchNorm2d(64),
+			nn.ReLU(inplace=True)
+        )
+        self.linear = nn.Conv2d(64, num_classes, kernel_size=3, padding=1, bias=True)
+    def forward(self, skip, x):
+        skip = self.up_dimention(skip)
+        x = torch.cat([x,skip], dim=1)
+        x = self.conv(x)
+        x = self.conv(x)
+        x = self.linear(x)
+        # print(x.size())
+        return x
 
 
-
+import matplotlib.pyplot as plt
 class MyNetworks(nn.Module):
     def __init__(self, img_size=224, num_classes=9):
         super(MyNetworks, self).__init__()
@@ -171,20 +264,24 @@ class MyNetworks(nn.Module):
         # self.encoder = MyEncoder() # 
         self.encoder = PVT(img_size=self.img_size)
         self.decoder = MyDecoder()
+        self.head = SegmentationHead()
 
     def forward(self, x):
         if x.size()[1] == 1:
             x = x.repeat(1,3,1,1)
+        skip = x.clone()
         features = self.encoder(x)
         # x = self.decoder(x, features)
         # check segmentation_head sau!!!
         # print("my_networks: len(features): ", len(features)) # 4
-        print(features[0].size(), features[1].size(), features[2].size(), features[3].size())
+        # print(features[0].size(), features[1].size(), features[2].size(), features[3].size())
         # print("features[-1]:",features[-1].size()) # torch.Size([2, 512, 7, 7])
-        x = self.decoder(features[-1])
-        print("after decoder:",x.size())
+        x = self.decoder(features)
+        # print("after decoder:",x.size()) # torch.Size([2, 32, 224, 224])
+        x = self.head(skip,x)
+        # print(x.size())
         # # torch.Size([2, 64, 56, 56]) torch.Size([2, 128, 28, 28]) torch.Size([2, 256, 14, 14]) torch.Size([2, 512, 7, 7])
-        return features
+        return x
 
 if __name__ == "__main__":
     # patch_expand = PatchExpand(ch_in=512, ch_out=256)

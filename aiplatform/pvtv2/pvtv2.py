@@ -164,7 +164,7 @@ class Block(nn.Module):
                 m.bias.data.zero_()
 
     def forward(self, x, H, W):
-        print(f"block forward: x={x.size()}, H={H}, W={W}")
+        # print(f"block forward: x={x.size()}, H={H}, W={W}")
         x = x + self.drop_path(self.attn(self.norm1(x), H, W))
         x = x + self.drop_path(self.mlp(self.norm2(x), H, W))
 
@@ -208,13 +208,13 @@ class OverlapPatchEmbed(nn.Module):
                 m.bias.data.zero_()
 
     def forward(self, x):
-        print("before proj:",x.size())
+        # print("before proj:",x.size())
         x = self.proj(x)
-        print("after proj:",x.size())
+        # print("after proj:",x.size())
         _, _, H, W = x.shape
         x = x.flatten(2).transpose(1, 2)
         x = self.norm(x)
-        print("after flatten:",x.size())
+        # print("after flatten:",x.size())
         return x, H, W
 
 
@@ -306,13 +306,19 @@ class PyramidVisionTransformerV2(nn.Module):
             block = getattr(self, f"block{i + 1}")
             norm = getattr(self, f"norm{i + 1}")
             x, H, W = patch_embed(x)
-            print("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm\n",block)
+            # print("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm\n",block)
+            # print("before block:",x.size())
             for blk in block:
                 x = blk(x, H, W)
             x = norm(x)
-            x = x.reshape(B, H, W, -1).permute(0, 3, 1, 2).contiguous()
+            # print("after norm:",x.size())
+            x = x.reshape(B, H, W, -1)
+            # print("after reshape:",x.size())  #  torch.Size([2, 28, 28, 128])
+            x = x.permute(0, 3, 1, 2)
+            # print("after permute:",x.size())
+            x = x.contiguous()
+            # print("after contiguous:",x.size())
             outs.append(x)
-
         return outs
 
     def forward(self, x):

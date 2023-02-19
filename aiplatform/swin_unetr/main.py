@@ -11,6 +11,7 @@
 
 import argparse
 import os
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 from functools import partial
 
 import numpy as np
@@ -20,7 +21,9 @@ import torch.multiprocessing as mp
 import torch.nn.parallel
 import torch.utils.data.distributed
 from optimizers.lr_scheduler import LinearWarmupCosineAnnealingLR
-from aiplatform.research_contributions.SwinUNETR.BTCV.trainer import run_training
+import sys
+sys.path.append("E:/tai_lieu_hoc_tap/tdh/tuannca_datn")
+from aiplatform.swin_unetr.trainer import run_training
 from utils.data_utils import get_loader
 
 from monai.inferers import sliding_window_inference
@@ -36,11 +39,11 @@ parser.add_argument("--logdir", default="test", type=str, help="directory to sav
 parser.add_argument(
     "--pretrained_dir", default="./pretrained_models/", type=str, help="pretrained checkpoint directory"
 )
-parser.add_argument("--data_dir", default="/dataset/dataset0/", type=str, help="dataset directory")
+parser.add_argument("--data_dir", default="dataset", type=str, help="dataset directory")
 parser.add_argument("--json_list", default="dataset_0.json", type=str, help="dataset json file")
 parser.add_argument(
     "--pretrained_model_name",
-    default="swin_unetr.epoch.b4_5000ep_f48_lr2e-4_pretrained.pt",
+    default="swin_unetr.base_5000ep_f48_lr2e-4_pretrained.pt",
     type=str,
     help="pretrained model name",
 )
@@ -94,6 +97,7 @@ parser.add_argument("--squared_dice", action="store_true", help="use squared Dic
 
 
 def main():
+    print("main")
     args = parser.parse_args()
     args.amp = not args.noamp
     args.logdir = "./runs/" + args.logdir
@@ -107,16 +111,16 @@ def main():
 
 
 def main_worker(gpu, args):
-
-    if args.distributed:
-        torch.multiprocessing.set_start_method("fork", force=True)
-    np.set_printoptions(formatter={"float": "{: 0.3f}".format}, suppress=True)
+    print("main worker")
+    # if args.distributed:
+    #     torch.multiprocessing.set_start_method("fork", force=True)
+    # np.set_printoptions(formatter={"float": "{: 0.3f}".format}, suppress=True)
     args.gpu = gpu
-    if args.distributed:
-        args.rank = args.rank * args.ngpus_per_node + gpu
-        dist.init_process_group(
-            backend=args.dist_backend, init_method=args.dist_url, world_size=args.world_size, rank=args.rank
-        )
+    # if args.distributed:
+    #     args.rank = args.rank * args.ngpus_per_node + gpu
+    #     dist.init_process_group(
+    #         backend=args.dist_backend, init_method=args.dist_url, world_size=args.world_size, rank=args.rank
+    #     )
     torch.cuda.set_device(args.gpu)
     torch.backends.cudnn.benchmark = True
     args.test_mode = False

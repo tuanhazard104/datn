@@ -132,9 +132,17 @@ if __name__ == "__main__":
     elif args.model_name == "SegFormer":
         args.pretrained_model = "trained_model\segformer\epoch_149.pth"
         net = SegFormer(num_classes=args.num_classes, phi="b0", pretrained=True, image_size=args.img_size)
-        
-        
 
+    elif args.model_name == "SwinUnet":
+        from aiplatform.Swin_Unet.networks.vision_transformer import SwinUnet
+        args.pretrained_model = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\pretrain_model\swin_unet\epoch_9.pth"
+        net = SwinUnet(num_classes=args.num_classes, img_size=args.img_size).cuda()
+
+    elif args.model_name == "MyNetworks":
+        from networks.my_networks import MyNetworks
+        args.pretrained_model = r"runs\transunet\epoch_9.pth"
+        net = MyNetworks(num_classes=args.num_classes).cuda()
+        
     else: # MedT
         args.img_size = 128
         net = MedT(img_size = args.img_size, imgchan = 1, num_classes = args.num_classes)

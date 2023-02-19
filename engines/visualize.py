@@ -8,31 +8,64 @@ import os
 # plt.plot(epchs, loss_plt, marker="o", markersize=1)
 event_count = 0
 value_count = 0
-loss = []
+
+# E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\transunet\transunet\transunet\log\events.out.tfevents.1676372802.aiserver
+# files = glob.glob("model/TU_pretrain_R50-ViT-B_16_skip3_epo150_bs8_224/log/*.aiserver")
+# for j in range(len(files)):
+#     basename = os.path.basename(files[j])
+#     print(basename)
+#     imgname = basename+"total_loss.jpg"
+#     summary = summary_iterator(files[j])
+#     for i,event in enumerate(summary): # moi event co mot value
+#         for value in event.summary.value:
+#             if value.tag == "info/total_loss": # loss_ce
+#                 if value.HasField('simple_value'):
+#                     iters.append(i)
+#                     loss.append(value.simple_value)
+#     # iter = []
+#     # for i in range(10500):
+#     #     iter.append(i)
+#     print("length of iters: ", len(iters))
+#     print("length of loss: ", len(loss))
+
+#     plt.figure()
+#     plt.xlabel('Iters')
+#     plt.ylabel('Total Loss')
+
+#     plt.plot(iters, loss)
+#     plt.savefig(imgname)
+total_loss = []
+ce_loss = []
+dice_loss = []
 iters = []
+file_name = "E:/tai_lieu_hoc_tap/tdh/tuannca_datn/runs/transunet/transunet/transunet/log/events.out.tfevents.1676372802.aiserver"
+file_name1 = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\transunet\transunet\transunet\log\events.out.tfevents.1676365275.aiserver"
+filenamey530 = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\events.out.tfevents.1675101858.Y530"
+swin_file = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\aiplatform\Swin_Unet\outputs\log\swin.Y530"
+filenname = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\abc.aiserver"
+mynetlog = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\transunet\log\final_mynet.Y530"
+summary = summary_iterator(mynetlog)
+for i,event in enumerate(summary): # moi event co mot value
+    for value in event.summary.value:
+        if value.tag == "info/total_loss": # loss_ce
+            if value.HasField('simple_value'):
+                iters.append(i)
+                total_loss.append(value.simple_value)
+        elif value.tag == "info/loss_ce":
+            if value.HasField('simple_value'):
+                # iters.append(i)
+                ce_loss.append(value.simple_value)
+print("length of iters: ", len(iters))
+print("length of total_loss: ", len(total_loss))
+print("length of ce_loss:",len(ce_loss))
+plt.figure()
+plt.xlabel('Iters')
+plt.ylabel('Total Loss')
+plt.plot(iters, total_loss)
+plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\total_loss.jpg")
 
-files = glob.glob("model/TU_pretrain_R50-ViT-B_16_skip3_epo150_bs8_224/log/*.aiserver")
-for j in range(len(files)):
-    basename = os.path.basename(files[j])
-    print(basename)
-    imgname = basename+"total_loss.jpg"
-    summary = summary_iterator(files[j])
-    for i,event in enumerate(summary): # moi event co mot value
-        
-        for value in event.summary.value:
-            if value.tag == "info/total_loss": # loss_ce
-                if value.HasField('simple_value'):
-                    iters.append(i)
-                    loss.append(value.simple_value)
-    # iter = []
-    # for i in range(10500):
-    #     iter.append(i)
-    print("length of iters: ", len(iters))
-    print("length of loss: ", len(loss))
-
-    plt.figure()
-    plt.xlabel('Iters')
-    plt.ylabel('Total Loss')
-
-    plt.plot(iters, loss)
-    plt.savefig(imgname)
+plt.figure()
+plt.xlabel('Iters')
+plt.ylabel('CE Loss')
+plt.plot(iters, ce_loss)
+plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\ce_loss.jpg")

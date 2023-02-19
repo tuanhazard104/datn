@@ -302,7 +302,7 @@ class PatchMerging(nn.Module):
         """
         x: B, H*W, C
         """
-        print("before PatchMerging:",x.size())
+        # print("before PatchMerging:",x.size()) # torch.Size([2, 3136, 96])
         H, W = self.input_resolution
         B, L, C = x.shape
         assert L == H * W, "input feature has wrong size"
@@ -319,7 +319,7 @@ class PatchMerging(nn.Module):
 
         x = self.norm(x)
         x = self.reduction(x)
-        print("after PatchMerging:", x.size())
+        # print("after PatchMerging:", x.size()) # torch.Size([2, 784, 192])
         return x
 
     def extra_repr(self) -> str:
@@ -344,9 +344,9 @@ class PatchExpand(nn.Module):
         x: B, H*W, C
         """
         H, W = self.input_resolution
-        print("before linear:x=",x.size())
+        # print("before linear:x=",x.size()) # torch.Size([4, 49, 768])
         x = self.expand(x)
-        print("after linear:x=",x.size())
+        # print("after linear:x=",x.size()) # torch.Size([4, 49, 1536])
         B, L, C = x.shape
         assert L == H * W, "input feature has wrong size"
 
@@ -432,7 +432,7 @@ class BasicLayer(nn.Module):
             self.downsample = None
 
     def forward(self, x):
-        print("before basic layer:",x.size())
+        # print("before basic layer:",x.size()) # torch.Size([2, 3136, 96])
         for blk in self.blocks:
             if self.use_checkpoint:
                 x = checkpoint.checkpoint(blk, x)
@@ -440,7 +440,7 @@ class BasicLayer(nn.Module):
                 x = blk(x)
         if self.downsample is not None:
             x = self.downsample(x)
-        print("after basic layer:",x.size())
+        # print("after basic layer:",x.size()) # torch.Size([2, 784, 192])
         return x
 
     def extra_repr(self) -> str:
@@ -543,7 +543,7 @@ class PatchEmbed(nn.Module):
             self.norm = None
 
     def forward(self, x):
-        print("before PatchEmbed",x.size())
+        # print("before PatchEmbed",x.size())
         B, C, H, W = x.shape
         # FIXME look at relaxing size constraints
         assert H == self.img_size[0] and W == self.img_size[1], \
@@ -551,7 +551,7 @@ class PatchEmbed(nn.Module):
         x = self.proj(x).flatten(2).transpose(1, 2)  # B Ph*Pw C
         if self.norm is not None:
             x = self.norm(x)
-        print("after PatchEmbed", x.size())
+        # print("after PatchEmbed", x.size())
         return x
 
     def flops(self):
@@ -743,8 +743,9 @@ class SwinTransformerSys(nn.Module):
             x = self.up(x)
             x = x.view(B,4*H,4*W,-1)
             x = x.permute(0,3,1,2) #B,C,H,W
+            # print("before output:",x.size())
             x = self.output(x)
-            
+            # print("after output:",x.size())
         return x
 
     def forward(self, x):

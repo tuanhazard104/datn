@@ -5,6 +5,7 @@ runs/
 model/
 weights/
 trained_model/
+pretrained_model/
 test_log/
 
 *.engine

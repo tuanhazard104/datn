@@ -206,7 +206,7 @@ class UNETR(nn.Module):
 
             # copy weights from  encoding blocks (default: num of blocks: 12)
             for bname, block in self.vit.blocks.named_children():
-                print(block)
+                # print(block)
                 block.loadFrom(weights, n_block=bname)
             # last norm layer of transformer
             self.vit.norm.weight.copy_(weights["state_dict"]["module.transformer.norm.weight"])

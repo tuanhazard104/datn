@@ -16,7 +16,9 @@ import numpy as np
 from torch.nn import CrossEntropyLoss, Dropout, Softmax, Linear, Conv2d, LayerNorm
 from torch.nn.modules.utils import _pair
 from scipy import ndimage
-from .swin_transformer_unet_skip_expand_decoder_sys import SwinTransformerSys
+import sys
+sys.path.append(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn")
+from aiplatform.Swin_Unet.networks.swin_transformer_unet_skip_expand_decoder_sys import SwinTransformerSys
 
 logger = logging.getLogger(__name__)
 

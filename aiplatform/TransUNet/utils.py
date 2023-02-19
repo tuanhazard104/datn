@@ -4,7 +4,7 @@ from medpy import metric
 from scipy.ndimage import zoom
 import torch.nn as nn
 import SimpleITK as sitk
-
+from aiplatform.swin_unetr.MONAI.monai.losses import TverskyLoss
 
 class DiceLoss(nn.Module):
     def __init__(self, n_classes):
@@ -30,11 +30,13 @@ class DiceLoss(nn.Module):
         return loss
 
     def forward(self, inputs, target, weight=None, softmax=False):
+        # print("before softmax:",inputs.size())
         if softmax:
             inputs = torch.softmax(inputs, dim=1)
-        # print("<>>>>>>>>>>>>>>>>>>>>>>>>>FORWARD: ",target.size())
+        # print("before softmax:",inputs.size())
+        # print("target: ",target.size()) # torch.Size([4, 224, 224])
         target = self._one_hot_encoder(target)
-        # print("\n", target.size())
+        # print("after one hot encoder:", target.size()) # torch.Size([4, 9, 224, 224])
         if weight is None:
             weight = [1] * self.n_classes
         assert inputs.size() == target.size(), 'predict {} & target {} shape do not match'.format(inputs.size(), target.size())
@@ -46,6 +48,28 @@ class DiceLoss(nn.Module):
             loss += dice * weight[i]
         return loss / self.n_classes
 
+class Tversky_Loss(nn.Module):
+    def __init__(self, n_classes):
+        super(Tversky_Loss, self).__init__()
+        self.n_classes = n_classes # n_classes = 9
+        self.tversky = TverskyLoss()
+
+    def _one_hot_encoder(self, input_tensor):
+        tensor_list = []
+        for i in range(self.n_classes):
+            temp_prob = input_tensor == i  # * torch.ones_like(input_tensor)
+            tensor_list.append(temp_prob.unsqueeze(1))
+        output_tensor = torch.cat(tensor_list, dim=1)
+        return output_tensor.float()
+    def forward(self, inputs, target, softmax=False):
+        loss = 0.0
+        if softmax:
+            inputs = torch.softmax(inputs, dim=1)
+        target = self._one_hot_encoder(target)
+        for i in range(0, self.n_classes):
+            tversky_loss = self.tversky(inputs[:, i], target[:, i])
+            loss += tversky_loss
+        return loss/self.n_classes
 
 def calculate_metric_percase(pred, gt):
     pred[pred > 0] = 1

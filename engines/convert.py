@@ -67,8 +67,8 @@ class ConvertData():
             img_128 = cv2.resize(img, (128, 128))
             cv2.imwrite(os.path.join(self.output_dir, basename), img_128)
 
-converter = ConvertData(input_dir="E:/tai_lieu_hoc_tap/tdh/tuannca_datn/runs/transunet/prediction/TU_Synapse224/MedT",
-                        output_dir="E:/tai_lieu_hoc_tap/tdh/tuannca_datn/runs/img_medt",
+converter = ConvertData(input_dir=r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\transunet\prediction\TU_Synapse224\MyNetworks",
+                        output_dir=r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\transunet\prediction\TU_Synapse224\MyNetworks\converted",
                         sufflex="nii.gz")
 
 converter.convert_nii()

@@ -112,9 +112,14 @@ if __name__ == "__main__":
     # print(x.size())
     # x = F.conv2d(x, weight=64)
     # print(x.size())
-
-    x = torch.randn(1, 512, 7, 7)
+    dim = 512
+    expand =  nn.Linear(dim, 2*dim, bias=False)
+    up1 = nn.ConvTranspose2d(in_channels=256,out_channels=256,kernel_size=1,stride=2,padding=1)
+    # up2 = nn.UpsamplingBilinear2d(size=dim//2,scale_factor=2)
+    x = torch.randn(1, 256, 14, 14)
     print(x.size())
-    up = up_conv(ch_in=512,ch_out=256)
-    x = up(x)
+    # up = up_conv(ch_in=512,ch_out=256)
+
+    # x = up(x)
+    x = up1(x)
     print(x.size())

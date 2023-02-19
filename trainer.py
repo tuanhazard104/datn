@@ -12,9 +12,10 @@ from tensorboardX import SummaryWriter
 from torch.nn.modules.loss import CrossEntropyLoss
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from aiplatform.TransUNet.utils import DiceLoss
+from aiplatform.TransUNet.utils import DiceLoss, Tversky_Loss
 from torchvision import transforms
 from torch.nn import functional as F
+from aiplatform.swin_unetr.MONAI.monai.losses import TverskyLoss
 
 def trainer_synapse(args, model, snapshot_path):
     from datasets.dataset_synapse import Synapse_dataset, RandomGenerator
@@ -40,8 +41,10 @@ def trainer_synapse(args, model, snapshot_path):
         model = nn.DataParallel(model)
     model.train()
     ce_loss = CrossEntropyLoss()
+    tversky_loss = Tversky_Loss(num_classes)
     dice_loss = DiceLoss(num_classes)
-    optimizer = optim.SGD(model.parameters(), lr=base_lr, momentum=0.9, weight_decay=0.0001)
+    # optimizer = optim.SGD(model.parameters(), lr=base_lr, momentum=0.9, weight_decay=0.0001)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, weight_decay=1e-5)
     writer = SummaryWriter(snapshot_path + '/log')
     iter_num = 0
     max_epoch = args.max_epochs
@@ -61,9 +64,11 @@ def trainer_synapse(args, model, snapshot_path):
             # print(outputs.size(), label_batch[:].long().size()) # torch.Size([2, 9, 256, 256]) torch.Size([2, 256, 256])
             # print(outputs[3].size(), outputs[2].size(), outputs[1].size(), outputs[0].size()) # torch.Size([2, 512, 7, 7]) torch.Size([2, 256, 14, 14]) torch.Size([2, 128, 28, 28]) torch.Size([2, 64, 56, 56])
             loss_ce = ce_loss(outputs, label_batch[:].long())
+            # print(label_batch[:].long().size()) #torch.Size([4, 224, 224])
             loss_dice = dice_loss(outputs, label_batch, softmax=True) #forward
+            loss_tversky = tversky_loss(outputs, label_batch, softmax=True)
             # print(label_batch.size())
-            loss = 0.5 * loss_ce + 0.5 * loss_dice
+            loss = 0.3 * loss_ce + 0.7 * loss_tversky
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
@@ -75,8 +80,8 @@ def trainer_synapse(args, model, snapshot_path):
             writer.add_scalar('info/lr', lr_, iter_num)
             writer.add_scalar('info/total_loss', loss, iter_num)
             writer.add_scalar('info/loss_ce', loss_ce, iter_num)
-
-            logging.info('iteration %d : loss: %f, loss_ce: %f, loss dice: %f' % (iter_num, loss.item(), loss_ce.item(), loss_dice.item()))
+            writer.add_scalar('info/loss_tversky', loss_ce, iter_num)
+            logging.info('iteration %d : loss: %f, loss_ce: %f, loss tversky: %f' % (iter_num, loss.item(), loss_ce.item(), loss_tversky.item()))
 
             if iter_num % 20 == 0:
                 image = image_batch[1, 0:1, :, :]
@@ -87,11 +92,16 @@ def trainer_synapse(args, model, snapshot_path):
                 labs = label_batch[1, ...].unsqueeze(0) * 50
                 writer.add_image('train/GroundTruth', labs, iter_num)
 
-        save_interval = 50  # int(max_epoch/6)
-        if epoch_num > int(max_epoch / 2) and (epoch_num + 1) % save_interval == 0:
-            save_mode_path = os.path.join(snapshot_path, 'epoch_' + str(epoch_num) + '.pth')
-            torch.save(model.state_dict(), save_mode_path)
-            logging.info("save model to {}".format(save_mode_path))
+        # save_interval = 50  # int(max_epoch/6)
+        # if epoch_num > int(max_epoch / 2) and (epoch_num + 1) % save_interval == 0:
+        #     save_mode_path = os.path.join(snapshot_path, 'epoch_' + str(epoch_num) + '.pth')
+        #     torch.save(model.state_dict(), save_mode_path)
+        #     logging.info("save model to {}".format(save_mode_path))
+
+        # save checkpoint after 1 epoch
+        save_mode_path = os.path.join(snapshot_path, 'epoch_' + str(epoch_num) + '.pth')
+        torch.save(model.state_dict(), save_mode_path)
+        logging.info("save model to {}".format(save_mode_path))
 
         if epoch_num >= max_epoch - 1:
             save_mode_path = os.path.join(snapshot_path, 'epoch_' + str(epoch_num) + '.pth')
