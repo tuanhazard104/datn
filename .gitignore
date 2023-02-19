@@ -56,7 +56,7 @@ venv.bak/
 *.gz
 *.zip
 *.aiserver
-
+*.Y530
 # Others
 __pycache__
 .vscode
