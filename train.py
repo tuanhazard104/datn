@@ -70,7 +70,7 @@ if __name__ == "__main__":
     config_vit = CONFIGS_ViT_seg[args.vit_name]
     config_vit.n_classes = args.num_classes
     config_vit.n_skip = args.n_skip
-        
+    checkpoint = None
     if args.model_name == "TransUNet":
         print("pretrain path: ", config_vit.pretrained_path)
         net = ViT_seg(config_vit, img_size=args.img_size, num_classes=config_vit.n_classes).cuda()
@@ -107,14 +107,18 @@ if __name__ == "__main__":
         net = PVT(num_classes=args.num_classes).cuda()
     elif args.model_name == "MyNetworks":
         from networks.my_networks import MyNetworks
+        checkpoint = torch.load("runs/epoch_66.pth")
+        print(checkpoint.keys())
         net = MyNetworks(num_classes=args.num_classes).cuda()
+        net.load_state_dict(checkpoint)
+
     else:
         args.img_size = 128
         net = MedT(img_size = args.img_size, imgchan = 1, num_classes = args.num_classes).cuda()
 
     trainer = {'Synapse': trainer_synapse,}
 
-    trainer[dataset_name](args, net, args.output_dir)
+    trainer[dataset_name](args, net, args.output_dir, checkpoint=checkpoint)
 
 
 

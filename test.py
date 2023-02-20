@@ -140,9 +140,9 @@ if __name__ == "__main__":
 
     elif args.model_name == "MyNetworks":
         from networks.my_networks import MyNetworks
-        args.pretrained_model = r"runs\transunet\epoch_9.pth"
+        args.pretrained_model = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\epoch_19_dice.pth"
         net = MyNetworks(num_classes=args.num_classes).cuda()
-        
+        net.load_state_dict(torch.load(args.pretrained_model))
     else: # MedT
         args.img_size = 128
         net = MedT(img_size = args.img_size, imgchan = 1, num_classes = args.num_classes)

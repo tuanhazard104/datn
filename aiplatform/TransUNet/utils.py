@@ -62,14 +62,16 @@ class Tversky_Loss(nn.Module):
         output_tensor = torch.cat(tensor_list, dim=1)
         return output_tensor.float()
     def forward(self, inputs, target, softmax=False):
-        loss = 0.0
         if softmax:
             inputs = torch.softmax(inputs, dim=1)
         target = self._one_hot_encoder(target)
-        for i in range(0, self.n_classes):
-            tversky_loss = self.tversky(inputs[:, i], target[:, i])
-            loss += tversky_loss
-        return loss/self.n_classes
+        print("after one hot:",target.size())
+        # for i in range(0, self.n_classes):
+        #     tversky_loss = self.tversky(inputs[:, i], target[:, i])
+        #     loss += tversky_loss
+        # return loss/self.n_classes
+        loss = self.tversky(inputs,target)
+        return loss
 
 def calculate_metric_percase(pred, gt):
     pred[pred > 0] = 1

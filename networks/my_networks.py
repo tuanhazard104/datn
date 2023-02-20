@@ -265,6 +265,7 @@ class MyNetworks(nn.Module):
         self.encoder = PVT(img_size=self.img_size)
         self.decoder = MyDecoder()
         self.head = SegmentationHead()
+        self._init_weights()
 
     def forward(self, x):
         if x.size()[1] == 1:
@@ -282,6 +283,14 @@ class MyNetworks(nn.Module):
         # print(x.size())
         # # torch.Size([2, 64, 56, 56]) torch.Size([2, 128, 28, 28]) torch.Size([2, 256, 14, 14]) torch.Size([2, 512, 7, 7])
         return x
+    
+    def _init_weights(self):
+        pretrained_dict = torch.load(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\pretrain_model\pvt_small_iter_40000.pth")
+        model_dict = self.encoder.state_dict()
+        pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
+        model_dict.update(pretrained_dict)
+        self.encoder.load_state_dict(model_dict)
+        print(">>>>>>>>>>>>>>>>>>>>successfully load!!!")
 
 if __name__ == "__main__":
     # patch_expand = PatchExpand(ch_in=512, ch_out=256)

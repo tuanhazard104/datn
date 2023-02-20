@@ -17,7 +17,7 @@ from torchvision import transforms
 from torch.nn import functional as F
 from aiplatform.swin_unetr.MONAI.monai.losses import TverskyLoss
 
-def trainer_synapse(args, model, snapshot_path):
+def trainer_synapse(args, model, snapshot_path, checkpoint=None):
     from datasets.dataset_synapse import Synapse_dataset, RandomGenerator
     logging.basicConfig(filename=snapshot_path + "/log.txt", level=logging.INFO,
                         format='[%(asctime)s.%(msecs)03d] %(message)s', datefmt='%H:%M:%S')
@@ -45,6 +45,7 @@ def trainer_synapse(args, model, snapshot_path):
     dice_loss = DiceLoss(num_classes)
     # optimizer = optim.SGD(model.parameters(), lr=base_lr, momentum=0.9, weight_decay=0.0001)
     optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, weight_decay=1e-5)
+    # optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     writer = SummaryWriter(snapshot_path + '/log')
     iter_num = 0
     max_epoch = args.max_epochs
