@@ -315,7 +315,7 @@ class PyramidVisionTransformerV2(nn.Module):
             x = x.reshape(B, H, W, -1)
             # print("after reshape:",x.size())  #  torch.Size([2, 28, 28, 128])
             x = x.permute(0, 3, 1, 2)
-            # print("after permute:",x.size())
+            # print("after permute:",x.size()) # (128,28,28)
             x = x.contiguous()
             # print("after contiguous:",x.size())
             outs.append(x)

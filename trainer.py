@@ -43,8 +43,8 @@ def trainer_synapse(args, model, snapshot_path, checkpoint=None):
     ce_loss = CrossEntropyLoss()
     tversky_loss = Tversky_Loss(num_classes)
     dice_loss = DiceLoss(num_classes)
-    # optimizer = optim.SGD(model.parameters(), lr=base_lr, momentum=0.9, weight_decay=0.0001)
-    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, weight_decay=1e-5)
+    optimizer = optim.SGD(model.parameters(), lr=base_lr, momentum=0.9, weight_decay=0.0001)
+    # optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, weight_decay=1e-5)
     # optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     writer = SummaryWriter(snapshot_path + '/log')
     iter_num = 0
@@ -67,9 +67,9 @@ def trainer_synapse(args, model, snapshot_path, checkpoint=None):
             loss_ce = ce_loss(outputs, label_batch[:].long())
             # print(label_batch[:].long().size()) #torch.Size([4, 224, 224])
             loss_dice = dice_loss(outputs, label_batch, softmax=True) #forward
-            loss_tversky = tversky_loss(outputs, label_batch, softmax=True)
+            # loss_tversky = tversky_loss(outputs, label_batch, softmax=True)
             # print(label_batch.size())
-            loss = 0.3 * loss_ce + 0.7 * loss_tversky
+            loss = 0.5 * loss_ce + 0.5 * loss_dice
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
@@ -81,8 +81,8 @@ def trainer_synapse(args, model, snapshot_path, checkpoint=None):
             writer.add_scalar('info/lr', lr_, iter_num)
             writer.add_scalar('info/total_loss', loss, iter_num)
             writer.add_scalar('info/loss_ce', loss_ce, iter_num)
-            writer.add_scalar('info/loss_tversky', loss_ce, iter_num)
-            logging.info('iteration %d : loss: %f, loss_ce: %f, loss tversky: %f' % (iter_num, loss.item(), loss_ce.item(), loss_tversky.item()))
+            writer.add_scalar('info/loss_dice', loss_dice, iter_num)
+            logging.info('iteration %d : loss: %f, loss_ce: %f, loss dice: %f' % (iter_num, loss.item(), loss_ce.item(), loss_dice.item()))
 
             if iter_num % 20 == 0:
                 image = image_batch[1, 0:1, :, :]
@@ -100,9 +100,10 @@ def trainer_synapse(args, model, snapshot_path, checkpoint=None):
         #     logging.info("save model to {}".format(save_mode_path))
 
         # save checkpoint after 1 epoch
-        save_mode_path = os.path.join(snapshot_path, 'epoch_' + str(epoch_num) + '.pth')
-        torch.save(model.state_dict(), save_mode_path)
-        logging.info("save model to {}".format(save_mode_path))
+        if epoch_num % 5 == 0:
+            save_mode_path = os.path.join(snapshot_path, 'epoch_' + str(epoch_num) + '.pth')
+            torch.save(model.state_dict(), save_mode_path)
+            logging.info("save model to {}".format(save_mode_path))
 
         if epoch_num >= max_epoch - 1:
             save_mode_path = os.path.join(snapshot_path, 'epoch_' + str(epoch_num) + '.pth')

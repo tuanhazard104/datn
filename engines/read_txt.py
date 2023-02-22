@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 losses = []
 iters = []
 j = 0
-with open('engines\log3000.txt',encoding="utf8") as f:
+with open(r'E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\transunet\log87\log87.txt',encoding="utf8") as f:
     lines = f.readlines()
     for i,line in enumerate(lines):
         if line[:9] == "iteration":
@@ -19,4 +19,4 @@ plt.figure()
 plt.xlabel('Iters')
 plt.ylabel('Total Loss')
 plt.plot(iters, losses)
-plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\line5000.jpg")
+plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\log87_txt.jpg")

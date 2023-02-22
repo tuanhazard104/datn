@@ -140,7 +140,7 @@ if __name__ == "__main__":
 
     elif args.model_name == "MyNetworks":
         from networks.my_networks import MyNetworks
-        args.pretrained_model = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\epoch_19_dice.pth"
+        args.pretrained_model = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\transunet\epoch_85.pth"
         net = MyNetworks(num_classes=args.num_classes).cuda()
         net.load_state_dict(torch.load(args.pretrained_model))
     else: # MedT
@@ -161,7 +161,7 @@ if __name__ == "__main__":
     logging.info(args.model_name)
 
     if args.is_savenii:
-        args.test_save_dir = args.test_save_dir+"/prediction"
+        args.test_save_dir = args.test_save_dir+"/prediction85"
         test_save_path = os.path.join(args.test_save_dir, args.exp, args.model_name)
         os.makedirs(test_save_path, exist_ok=True)
     else:

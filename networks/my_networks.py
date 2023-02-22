@@ -41,10 +41,7 @@ class PatchExpand(nn.Module):
 		# 	nn.ReLU(inplace=True)
         # )
         # self.upX2 = nn.Upsample(scale_factor=2)
-        if final:
-            self.upX2 =  nn.UpsamplingBilinear2d(scale_factor=2)
-        else:
-            self.upX2 =  nn.UpsamplingBilinear2d(scale_factor=2)
+        self.upX2 =  nn.UpsamplingBilinear2d(scale_factor=2)
         self.conv = nn.Conv2d(self.ch_in,self.ch_out,kernel_size=3,stride=1,padding=1,bias=True)
         self.bn = nn.BatchNorm2d(self.ch_out)
         self.relu = nn.ReLU(inplace=True)
@@ -243,7 +240,7 @@ class SegmentationHead(nn.Module):
 		    nn.BatchNorm2d(64),
 			nn.ReLU(inplace=True)
         )
-        self.linear = nn.Conv2d(64, num_classes, kernel_size=3, padding=1, bias=True)
+        self.linear = nn.Conv2d(64, num_classes, kernel_size=1, bias=False)
     def forward(self, skip, x):
         skip = self.up_dimention(skip)
         x = torch.cat([x,skip], dim=1)

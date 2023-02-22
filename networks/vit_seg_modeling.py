@@ -169,6 +169,8 @@ class Embeddings(nn.Module):
         if self.hybrid:
             # print("HYBRID")
             x, features = self.hybrid_model(x)
+            print(len(features))
+            # print(features[0].size(), features[1].size(), features[2].size()) # torch.Size([2, 512, 32, 32]) torch.Size([2, 256, 64, 64]) torch.Size([2, 64, 128, 128])
         else:
             features = None
         # print("after hybrid/before path_embedding: x.size() = ", x.size()) # (2,1024,16,16)

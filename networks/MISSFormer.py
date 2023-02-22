@@ -18,9 +18,9 @@ class PatchExpand(nn.Module):
         """
         # print("x_shape-----",x.shape)
         H, W = self.input_resolution
-        print("patch_expand: before linear x=",x.size())
+        # print("patch_expand: before linear x=",x.size()) # x= torch.Size([2, 49, 512])
         x = self.expand(x)
-        print("patch_expand: after linear x=",x.size())
+        # print("patch_expand: after linear x=",x.size()) # x= torch.Size([2, 49, 1024])
         B, L, C = x.shape
         # print(x.shape)
         assert L == H * W, "input feature has wrong size"
@@ -47,9 +47,9 @@ class FinalPatchExpand_X4(nn.Module):
         x: B, H*W, C
         """
         H, W = self.input_resolution
-        print("patch_expand: before linear x=",x.size())
+        # print("patch_expand: before linear x=",x.size())
         x = self.expand(x)
-        print("patch_expand: after linear x=",x.size())
+        # print("patch_expand: after linear x=",x.size())
         B, L, C = x.shape
         assert L == H * W, "input feature has wrong size"
 
@@ -395,9 +395,10 @@ class MISSFormer(nn.Module):
         tmp_2 = self.decoder_2(tmp_3, bridge[2].permute(0,2,3,1))
         # print("stage1-----")   
         tmp_1 = self.decoder_1(tmp_2, bridge[1].permute(0,2,3,1))
+        # print(tmp_1.size()) # torch.Size([2, 3136, 64]
         # print("stage0-----")  
         tmp_0 = self.decoder_0(tmp_1, bridge[0].permute(0,2,3,1))
-
+        # print(tmp_0.size()) # torch.Size([2, 9, 224, 224])
         return tmp_0
 
          

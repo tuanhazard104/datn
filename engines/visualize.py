@@ -48,7 +48,8 @@ mynetlog = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\transunet\log\final_mynet
 colab_log1 = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\log\events.out.tfevents.1676844150.49efd7d13c53"
 colab_log2 = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\log\events.out.tfevents.1676838941.49efd7d13c53"
 colab_log3 = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\events.out.tfevents.16768colab69672.54ca5bfa2118"
-summary = summary_iterator(colab_log3)
+colab_log87 = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\transunet\log87\log87_last.6d5db9be69a6"
+summary = summary_iterator(colab_log87)
 for i,event in enumerate(summary): # moi event co mot value
     for value in event.summary.value:
         if value.tag == "info/total_loss": # loss_ce
@@ -63,24 +64,35 @@ for i,event in enumerate(summary): # moi event co mot value
             if value.HasField('simple_value'):
                 # iters.append(i)
                 tversky_loss.append(value.simple_value)
+        elif value.tag == "info/loss_dice":
+            if value.HasField('simple_value'):
+                # iters.append(i)
+                dice_loss.append(value.simple_value)
 print("length of iters: ", len(iters))
 print("length of total_loss: ", len(total_loss))
 print("length of ce_loss:",len(ce_loss))
 print("len of tversky loss:",len(tversky_loss))
+print("len of dice loss:",len(dice_loss))
 plt.figure()
 plt.xlabel('Iters')
 plt.ylabel('Total Loss')
 plt.plot(iters, total_loss)
-plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\total_loss_colab3.jpg")
+plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\total_loss_colab87_last.jpg")
 
 plt.figure()
 plt.xlabel('Iters')
 plt.ylabel('CE Loss')
 plt.plot(iters, ce_loss)
-plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\ce_loss_colab3.jpg")
+plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\ce_loss_colab87_last.jpg")
+
+# plt.figure()
+# plt.xlabel('Iters')
+# plt.ylabel('Tversky Loss')
+# plt.plot(iters, tversky_loss)
+# plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\tversky_loss_colab87.jpg")
 
 plt.figure()
 plt.xlabel('Iters')
-plt.ylabel('Tversky Loss')
-plt.plot(iters, tversky_loss)
-plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\tversky_loss_colab3.jpg")
+plt.ylabel('Dice Loss')
+plt.plot(iters, dice_loss)
+plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\dice_loss_colab87_last.jpg")

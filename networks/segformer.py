@@ -263,8 +263,8 @@ class OverlapPatchEmbeddings(nn.Module):
         self.norm = nn.LayerNorm(dim)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        print(x.size())
-        print(f"before proj: in_ch = {self.in_ch}, dim = {self.dim}, patch_size = {self.patch_size}, stride = {self.stride}, padding = {self.padding}")
+        # print(x.size())
+        # print(f"before proj: in_ch = {self.in_ch}, dim = {self.dim}, patch_size = {self.patch_size}, stride = {self.stride}, padding = {self.padding}")
         px = self.proj(x)
         _, _, H, W = px.shape
         fx = px.flatten(2).transpose(1, 2)
@@ -346,7 +346,7 @@ class MiT(nn.Module):
         self.block1 = nn.ModuleList([
             TransformerBlock(dims[0], heads[0], reduction_ratios[0],token_mlp)
         for _ in range(layers[0])])
-        print("block1:\n", self.block1)
+        # print("block1:\n", self.block1)
         self.norm1 = nn.LayerNorm(dims[0])
 
         self.block2 = nn.ModuleList([
@@ -380,7 +380,7 @@ class MiT(nn.Module):
         # print("after blk: ", x.size()) # ([2, 3136, 32])
         x = self.norm1(x)
         # print("after norm: ", x.size()) # ([2, 3136, 32])
-        print("after transformer: ", x.reshape(B, H, W, -1).size(), x.reshape(B, H, W, -1).permute(0, 3, 1, 2).size(),x.reshape(B, H, W, -1).permute(0, 3, 1, 2).contiguous().size())
+        # print("after transformer: ", x.reshape(B, H, W, -1).size(), x.reshape(B, H, W, -1).permute(0, 3, 1, 2).size(),x.reshape(B, H, W, -1).permute(0, 3, 1, 2).contiguous().size())
         x = x.reshape(B, H, W, -1).permute(0, 3, 1, 2).contiguous()
         # print("after stage 1, x.size() = ", x.size()) # ([2, 32, 56, 56])
         outs.append(x)

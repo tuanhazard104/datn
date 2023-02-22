@@ -54,7 +54,8 @@ class SwinUnet(nn.Module):
 
     def load_from(self, config):
         # pretrained_path = config.MODEL.PRETRAIN_CKPT
-        pretrained_path = "E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/pretrained_ckpt/swin_tiny_patch4_window7_224.pth"
+        # pretrained_path = "E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/pretrained_ckpt/swin_tiny_patch4_window7_224.pth"
+        pretrained_path = "E:/tai_lieu_hoc_tap/tdh/tuannca_datn/aiplatform/Swin_Unet/outputs/epoch_8.pth"
         if pretrained_path is not None:
             print("pretrained_path:{}".format(pretrained_path))
             device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
