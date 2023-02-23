@@ -49,7 +49,7 @@ args = parser.parse_args()
 
 def inference(args, model, test_save_path=None):
     db_test = Synapse_dataset(base_dir=args.volume_path, split="test_vol", list_dir=args.list_dir)
-    testloader = DataLoader(db_test, batch_size=args.batch_size, shuffle=False, num_workers=1)
+    testloader = DataLoader(db_test, batch_size=args.batch_size, shuffle=False, num_workers=0)
     print("len test loader: ", len(testloader))
     logging.info("{} test iterations per epoch".format(len(testloader)))
     model.eval().cuda()
@@ -143,6 +143,10 @@ if __name__ == "__main__":
         args.pretrained_model = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\transunet\epoch_85.pth"
         net = MyNetworks(num_classes=args.num_classes).cuda()
         net.load_state_dict(torch.load(args.pretrained_model))
+    elif args.model_name == "MISSFormer":
+        from networks.MISSFormer import MISSFormer
+        net = MISSFormer(num_classes=args.num_classes).cuda()
+        args.pretrained_model = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\epoch_99_miss.pth"
     else: # MedT
         args.img_size = 128
         net = MedT(img_size = args.img_size, imgchan = 1, num_classes = args.num_classes)

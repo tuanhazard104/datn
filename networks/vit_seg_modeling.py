@@ -19,6 +19,9 @@ from scipy import ndimage
 from . import vit_seg_configs as configs
 from .vit_seg_modeling_resnet_skip import ResNetV2
 
+import sys
+sys.path.append("E:/tai_lieu_hoc_tap/tdh/tuannca_datn")
+from aiplatform.EfficientNet_PyTorch.efficientnet_pytorch.model import EfficientNet
 
 logger = logging.getLogger(__name__)
 
@@ -135,9 +138,11 @@ class Embeddings(nn.Module):
             grid_size = config.patches["grid"]
             # print("img_size", img_size) # (256,256)
             # print("grid_size", grid_size) # (16,16)
-            patch_size = (img_size[0] // 16 // grid_size[0], img_size[1] // 16 // grid_size[1]) # (1,1)
-            patch_size_real = (patch_size[0] * 16, patch_size[1] * 16)
-            n_patches = (img_size[0] // patch_size_real[0]) * (img_size[1] // patch_size_real[1]) # img_size error!
+            # patch_size = (img_size[0] // 16 // grid_size[0], img_size[1] // 16 // grid_size[1]) # (1,1)
+            patch_size = (1,1) #efficientnet
+            # patch_size_real = (patch_size[0] * 16, patch_size[1] * 16)
+            # n_patches = (img_size[0] // patch_size_real[0]) * (img_size[1] // patch_size_real[1]) # img_size error!
+            n_patches = 49
             # print("n_patches: ", n_patches) # 256
             self.hybrid = True
         else:
@@ -146,9 +151,12 @@ class Embeddings(nn.Module):
             self.hybrid = False
         
         if self.hybrid:
-            self.hybrid_model = ResNetV2(block_units=config.resnet.num_layers, width_factor=config.resnet.width_factor)
-            print("RESNET V2: block_units, width_factor",config.resnet.num_layers,config.resnet.width_factor)
-            in_channels = self.hybrid_model.width * 16 # 64*16=1024
+            # self.hybrid_model = ResNetV2(block_units=config.resnet.num_layers, width_factor=config.resnet.width_factor)
+            self.hybrid_model = EfficientNet.from_pretrained('efficientnet-b0')
+            # print("RESNET V2: block_units, width_factor",config.resnet.num_layers,config.resnet.width_factor)
+            # in_channels = self.hybrid_model.width * 16 # 64*16=1024
+            in_channels = 1280 # efficientnet last last layer
+            patch_size = 1
         # inchannels: 1024, out_channels: 768, kernel_size: (1, 1), stride: (1, 1)
         # self.patch_size = patch_size
         print("INIT before patch_embedding: ", in_channels, config.hidden_size, patch_size)
@@ -156,7 +164,7 @@ class Embeddings(nn.Module):
                                        out_channels=config.hidden_size,
                                        kernel_size=patch_size,
                                        stride=patch_size)
-        
+        print("n_patches: ", n_patches)
         self.position_embeddings = nn.Parameter(torch.zeros(1, n_patches, config.hidden_size))
         # print(self.position_embeddings.size()) # torch.Size([1, 256, 768])
         print("dropour rate:",config.transformer["dropout_rate"])
@@ -168,8 +176,10 @@ class Embeddings(nn.Module):
         # print("before hybrid: x.size() = ", x.size()) # (2,3,256,256)
         if self.hybrid:
             # print("HYBRID")
-            x, features = self.hybrid_model(x)
-            print(len(features))
+            # x, features = self.hybrid_model(x)
+            x, features = self.hybrid_model.extract_features(x)
+      
+            # print(len(features))
             # print(features[0].size(), features[1].size(), features[2].size()) # torch.Size([2, 512, 32, 32]) torch.Size([2, 256, 64, 64]) torch.Size([2, 64, 128, 128])
         else:
             features = None
@@ -281,7 +291,8 @@ class Transformer(nn.Module):
         embedding_output, features = self.embeddings(input_ids)
         # print("before encodeing: embedding_output = ", embedding_output.size()) # ([2, 256, 768])
         encoded, attn_weights = self.encoder(embedding_output)  # (B, n_patch, hidden)
-        # print(f"features[0]: {features[0].size()}, features[1]: {features[1].size()}, features[2]: {features[2].size()}") # (2,512,32,32), (2,256,64,64), (2,64,128,128)
+        # print(f"features[0]: {features[0].size()}, features[1]: {features[1].size()}, features[2]: {features[2].size()}, features[3]: {features[3].size()}") # (2,512,32,32), (2,256,64,64), (2,64,128,128)
+        # print("encoded:",encoded.size()) # torch.Size([2, 49, 768])
         return encoded, attn_weights, features
 
 
@@ -343,12 +354,12 @@ class DecoderBlock(nn.Module):
             # print(f"before cat: x={x.size()}, skip={skip.size()}") #  x=torch.Size([2, 512, 32, 32]), skip=torch.Size([2, 512, 32, 32])
             x = torch.cat([x, skip], dim=1)
             # print("after cat:",x.size()) # torch.Size([2, 1024, 32, 32])
+        
         x = self.conv1(x)
         # print("after conv1:",x.size()) # torch.Size([2, 128, 64, 64])
         x = self.conv2(x)
         # print("after conv2:",x.size()) # torch.Size([2, 128, 64, 64])
         return x
-
 
 class SegmentationHead(nn.Sequential):
 
@@ -363,7 +374,8 @@ class DecoderCup(nn.Module):
     def __init__(self, config):
         super().__init__()
         self.config = config
-        head_channels = 512
+        # head_channels = 512
+        head_channels = 112
         self.conv_more = Conv2dReLU(
             config.hidden_size,
             head_channels,
@@ -387,18 +399,26 @@ class DecoderCup(nn.Module):
             DecoderBlock(in_ch, out_ch, sk_ch) for in_ch, out_ch, sk_ch in zip(in_channels, out_channels, skip_channels)
         ]
         self.blocks = nn.ModuleList(blocks)
+        # self.final_upsampling = 
 
     def forward(self, hidden_states, features=None):
+        # print(len(features), features[0].size(), features[1].size(), features[2].size(),features[3].size())
+        # # 4 torch.Size([2, 16, 112, 112]) torch.Size([2, 24, 56, 56]) torch.Size([2, 40, 28, 28]) torch.Size([2, 112, 14, 14])
+        # print(len(self.blocks))
         B, n_patch, hidden = hidden_states.size()  # reshape from (B, n_patch, hidden) to (B, h, w, hidden)
         h, w = int(np.sqrt(n_patch)), int(np.sqrt(n_patch))
         x = hidden_states.permute(0, 2, 1)
         x = x.contiguous().view(B, hidden, h, w)
         x = self.conv_more(x)
+        # print(len(self.blocks)) # 4
+        # print(self.config.n_skip)
         for i, decoder_block in enumerate(self.blocks):
             if features is not None:
-                skip = features[i] if (i < self.config.n_skip) else None
+                skip = features[-(i+1)] if (i < self.config.n_skip) else None
             else:
                 skip = None
+            # print(">>>",i,x.size())
+            # print("<<<",skip.size())
             x = decoder_block(x, skip=skip)
         return x
 
@@ -415,6 +435,7 @@ class VisionTransformer(nn.Module):
             in_channels=config['decoder_channels'][-1],
             out_channels=config['n_classes'],
             kernel_size=3,
+            upsampling=2
         )
         self.config = config
 
@@ -422,7 +443,8 @@ class VisionTransformer(nn.Module):
         if x.size()[1] == 1:
             x = x.repeat(1,3,1,1)
         x, attn_weights, features = self.transformer(x)  # (B, n_patch, hidden)
-        # print("after transformer: ", x.size()) # torch.Size([2, 256, 768])
+        # print("after transformer: x=", x.size()) # torch.Size([2, 256, 768]) # torch.Size([2, 49, 768])
+        # print(features[3].size())
         x = self.decoder(x, features)
         # print("after decoder: ", x.size()) # torch.Size([2, 16, 256, 256])
         logits = self.segmentation_head(x)
@@ -487,6 +509,7 @@ CONFIGS = {
     'R50-ViT-B_16': configs.get_r50_b16_config(),
     'R50-ViT-L_16': configs.get_r50_l16_config(),
     'testing': configs.get_testing(),
+    'EN-ViT-B_16': configs.get_EN_b16_config(),
 }
 
 

@@ -385,7 +385,7 @@ class MISSFormer(nn.Module):
         # print(f"encoder[0]:{encoder[0].size()}, encoder[1]:{encoder[1].size()}, encoder[2]:{encoder[2].size()}, encoder[3]:{encoder[3].size()}")
         ## encoder[0]:torch.Size([2, 64, 56, 56]), encoder[1]:torch.Size([2, 128, 28, 28]), encoder[2]:torch.Size([2, 320, 14, 14]), encoder[3]:torch.Size([2, 512, 7, 7])
         bridge = self.bridge(encoder) #list
-
+        # print(bridge[0].size(), bridge[1].size(), bridge[2].size(), bridge[3].size())
         b,c,_,_ = bridge[3].shape
         # print(bridge[3].shape, bridge[2].shape,bridge[1].shape, bridge[0].shape)
         #---------------Decoder-------------------------     

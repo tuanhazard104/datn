@@ -39,9 +39,9 @@ parser.add_argument('--img_size', type=int,
 parser.add_argument('--seed', type=int,
                     default=1234, help='random seed')
 parser.add_argument('--n_skip', type=int,
-                    default=3, help='using number of skip-connect, default is num')
+                    default=4, help='using number of skip-connect, default is num')
 parser.add_argument('--vit_name', type=str,
-                    default=r'R50-ViT-B_16', help='select one vit model')
+                    default=r'EN-ViT-B_16', help='select one vit model')
 parser.add_argument('--vit_patches_size', type=int,
                     default=16, help='vit_patches_size, default is 16')
 args = parser.parse_args()
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     if args.model_name == "TransUNet":
         print("pretrain path: ", config_vit.pretrained_path)
         net = ViT_seg(config_vit, img_size=args.img_size, num_classes=config_vit.n_classes).cuda()
-        net.load_from(weights=np.load(config_vit.pretrained_path))
+        # net.load_from(weights=np.load(config_vit.pretrained_path))
 
     elif args.model_name == "SegFormer":
         # from aiplatform.segformer_lucid.segformer_pytorch.segformer_pytorch import Segformer

@@ -55,7 +55,23 @@ def get_r50_b16_config():
     config.n_classes = 2
     config.n_skip = 3
     config.activation = 'softmax'
+    return config
 
+def get_EN_b16_config():
+    """Returns the Resnet50 + ViT-B/16 configuration."""
+    config = get_b16_config()
+    config.patches.grid = (14, 14)
+    config.resnet = ml_collections.ConfigDict()
+    config.resnet.num_layers = (3, 4, 9)
+    config.resnet.width_factor = 1
+
+    config.classifier = 'seg'
+    config.pretrained_path = 'pretrain_model/transunet/R50_ViT-B_16.npz'
+    config.decoder_channels = (40, 24, 16, 16)
+    config.skip_channels = [112, 40, 24, 16]
+    config.n_classes = 2
+    config.n_skip = 4
+    config.activation = 'softmax'
     return config
 
 

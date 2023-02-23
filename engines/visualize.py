@@ -49,7 +49,8 @@ colab_log1 = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\log\events.out.tfevents
 colab_log2 = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\log\events.out.tfevents.1676838941.49efd7d13c53"
 colab_log3 = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\events.out.tfevents.16768colab69672.54ca5bfa2118"
 colab_log87 = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\transunet\log87\log87_last.6d5db9be69a6"
-summary = summary_iterator(colab_log87)
+missformer99 = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\missformer99.cfcf99e53b24"
+summary = summary_iterator(missformer99)
 for i,event in enumerate(summary): # moi event co mot value
     for value in event.summary.value:
         if value.tag == "info/total_loss": # loss_ce
@@ -77,13 +78,13 @@ plt.figure()
 plt.xlabel('Iters')
 plt.ylabel('Total Loss')
 plt.plot(iters, total_loss)
-plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\total_loss_colab87_last.jpg")
+plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\missformer99_total.jpg")
 
 plt.figure()
 plt.xlabel('Iters')
 plt.ylabel('CE Loss')
 plt.plot(iters, ce_loss)
-plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\ce_loss_colab87_last.jpg")
+plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\missformer99_ce.jpg")
 
 # plt.figure()
 # plt.xlabel('Iters')
@@ -95,4 +96,4 @@ plt.figure()
 plt.xlabel('Iters')
 plt.ylabel('Dice Loss')
 plt.plot(iters, dice_loss)
-plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\dice_loss_colab87_last.jpg")
+plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\missformer99_dice.jpg")
