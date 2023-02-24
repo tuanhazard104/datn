@@ -36,7 +36,7 @@ parser.add_argument('--batch_size', type=int, default=1, help='batch_size per gp
 parser.add_argument('--img_size', type=int, default=224, help='input patch size of network input')
 parser.add_argument('--is_savenii', action="store_true", help='whether to save results during inference')
 
-parser.add_argument('--n_skip', type=int, default=3, help='using number of skip-connect, default is num')
+parser.add_argument('--n_skip', type=int, default=4, help='using number of skip-connect, default is num')
 parser.add_argument('--vit_name', type=str, default='R50-ViT-B_16', help='select one vit model')
 
 parser.add_argument('--test_save_dir', type=str, default='runs/transunet', help='saving prediction as nii!')
@@ -126,7 +126,8 @@ if __name__ == "__main__":
 
     if args.model_name == "TransUNet":
         net = ViT_seg(config_vit, img_size=args.img_size, num_classes=config_vit.n_classes).cuda()
-        args.pretrained_model = "trained_model\TU_Synapse224\TU_pretrain_R50-ViT-B_16_skip3_epo150_bs8_224\epoch_149.pth"
+        # args.pretrained_model = "trained_model\TU_Synapse224\TU_pretrain_R50-ViT-B_16_skip3_epo150_bs8_224\epoch_149.pth"
+        args.pretrained_model = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\epoch_125_transeffunet.pth"
         # net.load_from(weights=np.load(config_vit.pretrained_path))
 
     elif args.model_name == "SegFormer":
@@ -165,7 +166,7 @@ if __name__ == "__main__":
     logging.info(args.model_name)
 
     if args.is_savenii:
-        args.test_save_dir = args.test_save_dir+"/prediction85"
+        args.test_save_dir = args.test_save_dir+"/prediction125"
         test_save_path = os.path.join(args.test_save_dir, args.exp, args.model_name)
         os.makedirs(test_save_path, exist_ok=True)
     else:

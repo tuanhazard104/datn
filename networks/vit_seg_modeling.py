@@ -152,10 +152,10 @@ class Embeddings(nn.Module):
         
         if self.hybrid:
             # self.hybrid_model = ResNetV2(block_units=config.resnet.num_layers, width_factor=config.resnet.width_factor)
-            self.hybrid_model = EfficientNet.from_pretrained('efficientnet-b0')
+            self.hybrid_model = EfficientNet.from_pretrained('efficientnet-b7')
             # print("RESNET V2: block_units, width_factor",config.resnet.num_layers,config.resnet.width_factor)
             # in_channels = self.hybrid_model.width * 16 # 64*16=1024
-            in_channels = 1280 # efficientnet last last layer
+            in_channels = 2560 # efficientnet last last layer
             patch_size = 1
         # inchannels: 1024, out_channels: 768, kernel_size: (1, 1), stride: (1, 1)
         # self.patch_size = patch_size
@@ -354,6 +354,10 @@ class DecoderBlock(nn.Module):
             # print(f"before cat: x={x.size()}, skip={skip.size()}") #  x=torch.Size([2, 512, 32, 32]), skip=torch.Size([2, 512, 32, 32])
             x = torch.cat([x, skip], dim=1)
             # print("after cat:",x.size()) # torch.Size([2, 1024, 32, 32])
+        # else:
+            # print("none skip!!!!!!!!!!")
+        # if final:
+        #     x = self.up(x)
         
         x = self.conv1(x)
         # print("after conv1:",x.size()) # torch.Size([2, 128, 64, 64])
@@ -366,7 +370,7 @@ class SegmentationHead(nn.Sequential):
     def __init__(self, in_channels, out_channels, kernel_size=3, upsampling=1):
         conv2d = nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, padding=kernel_size // 2)
         upsampling = nn.UpsamplingBilinear2d(scale_factor=upsampling) if upsampling > 1 else nn.Identity()
-        print(upsampling)
+        # print(upsampling)
         super().__init__(conv2d, upsampling)
 
 
@@ -375,18 +379,20 @@ class DecoderCup(nn.Module):
         super().__init__()
         self.config = config
         # head_channels = 512
-        head_channels = 112
+        # head_channels = 112
+        head_channels = 224
         self.conv_more = Conv2dReLU(
-            config.hidden_size,
-            head_channels,
+            config.hidden_size, #768
+            head_channels, # 224
             kernel_size=3,
             padding=1,
             use_batchnorm=True,
         )
         decoder_channels = config.decoder_channels
         in_channels = [head_channels] + list(decoder_channels[:-1])
+        # print("in_channel:", in_channels) # [224, 224, 80, 48], b7
         out_channels = decoder_channels
-
+        # print("out_channels:", out_channels) # (224, 80, 48, 32)
         if self.config.n_skip != 0:
             skip_channels = self.config.skip_channels
             for i in range(4-self.config.n_skip):  # re-select the skip channels according to n_skip
@@ -394,7 +400,7 @@ class DecoderCup(nn.Module):
 
         else:
             skip_channels=[0,0,0,0]
-
+        # print("skip channels:", skip_channels) #  [80, 48, 32, 16]
         blocks = [
             DecoderBlock(in_ch, out_ch, sk_ch) for in_ch, out_ch, sk_ch in zip(in_channels, out_channels, skip_channels)
         ]
@@ -415,10 +421,12 @@ class DecoderCup(nn.Module):
         for i, decoder_block in enumerate(self.blocks):
             if features is not None:
                 skip = features[-(i+1)] if (i < self.config.n_skip) else None
+                # print("<<<",skip.size())
             else:
                 skip = None
-            # print(">>>",i,x.size())
-            # print("<<<",skip.size())
+                # print("none!!!!")
+            # print(">>> x:",i,x.size())
+            
             x = decoder_block(x, skip=skip)
         return x
 
@@ -435,7 +443,7 @@ class VisionTransformer(nn.Module):
             in_channels=config['decoder_channels'][-1],
             out_channels=config['n_classes'],
             kernel_size=3,
-            upsampling=2
+            
         )
         self.config = config
 
@@ -444,7 +452,7 @@ class VisionTransformer(nn.Module):
             x = x.repeat(1,3,1,1)
         x, attn_weights, features = self.transformer(x)  # (B, n_patch, hidden)
         # print("after transformer: x=", x.size()) # torch.Size([2, 256, 768]) # torch.Size([2, 49, 768])
-        # print(features[3].size())
+        # print(features[3].size(), features[2].size(), features[1].size(), features[0].size())
         x = self.decoder(x, features)
         # print("after decoder: ", x.size()) # torch.Size([2, 16, 256, 256])
         logits = self.segmentation_head(x)
@@ -509,7 +517,8 @@ CONFIGS = {
     'R50-ViT-B_16': configs.get_r50_b16_config(),
     'R50-ViT-L_16': configs.get_r50_l16_config(),
     'testing': configs.get_testing(),
-    'EN-ViT-B_16': configs.get_EN_b16_config(),
+    'EFN-B0': configs.get_EFNB0_b16_config(),
+    'EFN-B7': configs.get_EFNB7_b16_config(),
 }
 
 

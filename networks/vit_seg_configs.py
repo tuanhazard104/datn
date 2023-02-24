@@ -57,7 +57,7 @@ def get_r50_b16_config():
     config.activation = 'softmax'
     return config
 
-def get_EN_b16_config():
+def get_EFNB0_b16_config():
     """Returns the Resnet50 + ViT-B/16 configuration."""
     config = get_b16_config()
     config.patches.grid = (14, 14)
@@ -66,14 +66,27 @@ def get_EN_b16_config():
     config.resnet.width_factor = 1
 
     config.classifier = 'seg'
-    config.pretrained_path = 'pretrain_model/transunet/R50_ViT-B_16.npz'
+    config.pretrained_path = 'runs/epoch_125_transeffunet.pth'
     config.decoder_channels = (40, 24, 16, 16)
     config.skip_channels = [112, 40, 24, 16]
-    config.n_classes = 2
+    config.n_classes = 9
     config.n_skip = 4
     config.activation = 'softmax'
     return config
 
+def get_EFNB7_b16_config():
+    """Returns the Resnet50 + ViT-B/16 configuration."""
+    config = get_b16_config()
+    config.patches.grid = (14, 14)
+
+    config.classifier = 'seg'
+    config.pretrained_path = 'runs/epoch_125_transeffunet.pth'
+    config.decoder_channels = (80, 48, 32, 16, 16)
+    config.skip_channels = [224, 80, 48, 32, 0]
+    config.n_classes = 9
+    config.n_skip = 4
+    config.activation = 'softmax'
+    return config
 
 def get_b32_config():
     """Returns the ViT-B/32 configuration."""
