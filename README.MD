@@ -1,26 +1,11 @@
 ### Training command:
-1) TransUNet
+1) TransUNet with Efficientnet backbone
 ```bash 
-python train.py --model_name "TransUNet" --img_size 256
+python train.py --model_name "TransUNet" --img_size 224 --vit_name "EFN-B7" --n_skip 4
 ``` 
-2) SegFormer
-```bash 
-python train.py --model_name "SegFormer" --img_size 224
-``` 
-3) Medical Transformer
-```bash 
-python train.py --model_name "MedT" --img_size 128
-``` 
+
 ### Testing command:
-1) TransUNet
+1) TransUNet with Efficientnet backbone
 ```bash 
-python test.py --model_name "TransUNet" --img_size 256 --is_savenii
-``` 
-2) SegFormer
-```bash 
-python test.py --model_name "SegFormer" --img_size 224 --is_savenii
-``` 
-3) Medical Transformer
-```bash 
-python test.py --model_name "MedT" --img_size 128 --is_savenii
+python test.py --vit_name "EFN-B7" --model_name "TransUNet" --img_size 224 --pretrained_model "path/to/your/model" --is_savenii
 ``` 

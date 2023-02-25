@@ -22,7 +22,8 @@ parser.add_argument('--model_name', type=str, default="TransUNet", help="model n
 parser.add_argument('--volume_path', type=str,
                     default='datasets/raw_data/test_vol_h5', help='root dir for validation volume data')  # for acdc volume_path=root_dir
 parser.add_argument('--output_dir',type=str, default="runs/medt", help="save testing phase on this path")
-
+parser.add_argument('--pretrained_model', type=str,
+                    default='runs/epoch_70_transeffunet7_final.pth', help='path to pretrain model')
 parser.add_argument('--dataset', type=str,
                     default='Synapse', help='experiment_name')
 parser.add_argument('--num_classes', type=int,
