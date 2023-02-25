@@ -121,13 +121,13 @@ if __name__ == "__main__":
     config_vit.n_classes = args.num_classes
     config_vit.n_skip = args.n_skip
     config_vit.patches.size = (args.vit_patches_size, args.vit_patches_size)
-    if args.vit_name.find('R50') !=-1:
-        config_vit.patches.grid = (int(args.img_size/args.vit_patches_size), int(args.img_size/args.vit_patches_size))
+    # if args.vit_name.find('R50') !=-1:
+    #     config_vit.patches.grid = (int(args.img_size/args.vit_patches_size), int(args.img_size/args.vit_patches_size))
 
     if args.model_name == "TransUNet":
         net = ViT_seg(config_vit, img_size=args.img_size, num_classes=config_vit.n_classes).cuda()
         # args.pretrained_model = "trained_model\TU_Synapse224\TU_pretrain_R50-ViT-B_16_skip3_epo150_bs8_224\epoch_149.pth"
-        args.pretrained_model = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\epoch_125_transeffunet.pth"
+        args.pretrained_model = "runs/epoch_70_transeffunet7_final.pth"  
         # net.load_from(weights=np.load(config_vit.pretrained_path))
 
     elif args.model_name == "SegFormer":
@@ -144,6 +144,7 @@ if __name__ == "__main__":
         args.pretrained_model = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\transunet\epoch_85.pth"
         net = MyNetworks(num_classes=args.num_classes).cuda()
         net.load_state_dict(torch.load(args.pretrained_model))
+
     elif args.model_name == "MISSFormer":
         from networks.MISSFormer import MISSFormer
         net = MISSFormer(num_classes=args.num_classes).cuda()
@@ -166,7 +167,7 @@ if __name__ == "__main__":
     logging.info(args.model_name)
 
     if args.is_savenii:
-        args.test_save_dir = args.test_save_dir+"/prediction125"
+        args.test_save_dir = args.test_save_dir+"/prediction"
         test_save_path = os.path.join(args.test_save_dir, args.exp, args.model_name)
         os.makedirs(test_save_path, exist_ok=True)
     else:

@@ -21,7 +21,7 @@ from .vit_seg_modeling_resnet_skip import ResNetV2
 
 import sys
 sys.path.append("E:/tai_lieu_hoc_tap/tdh/tuannca_datn")
-from aiplatform.EfficientNet_PyTorch.efficientnet_pytorch.model import EfficientNet
+from networks.efficientnet_pytorch.model import EfficientNet
 
 logger = logging.getLogger(__name__)
 
@@ -131,9 +131,6 @@ class Embeddings(nn.Module):
         self.config = config
         img_size = _pair(img_size)
 
-        position_embeddings_debug = nn.Parameter(torch.zeros(1, 0, config.hidden_size))
-        print("posotion embeddings debug: ",position_embeddings_debug.size())
-
         if config.patches.get("grid") is not None:   # ResNet
             grid_size = config.patches["grid"]
             # print("img_size", img_size) # (256,256)
@@ -152,9 +149,8 @@ class Embeddings(nn.Module):
         
         if self.hybrid:
             # self.hybrid_model = ResNetV2(block_units=config.resnet.num_layers, width_factor=config.resnet.width_factor)
-            self.hybrid_model = EfficientNet.from_pretrained('efficientnet-b7')
-            # print("RESNET V2: block_units, width_factor",config.resnet.num_layers,config.resnet.width_factor)
             # in_channels = self.hybrid_model.width * 16 # 64*16=1024
+            self.hybrid_model = EfficientNet.from_pretrained('efficientnet-b7')
             in_channels = 2560 # efficientnet last last layer
             patch_size = 1
         # inchannels: 1024, out_channels: 768, kernel_size: (1, 1), stride: (1, 1)
