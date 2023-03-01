@@ -77,10 +77,11 @@ class UNETR(nn.Module):
         if pos_embed not in ["conv", "perceptron"]:
             raise KeyError(f"Position embedding layer of type {pos_embed} is not supported.")
         
-        # self.hybrid = EfficientNet3D.from_name("efficientnet-b7", in_channels=1).cuda()
+        self.hybrid = EfficientNet3D.from_name("efficientnet-b7", in_channels=1).cuda()
 
         self.num_layers = 12
-        self.patch_size = (16, 16, 16)
+        # self.patch_size = (16, 16, 16)
+        self.patch_size = (1, 1, 1)
         self.feat_size = (
             img_size[0] // self.patch_size[0],
             img_size[1] // self.patch_size[1],
@@ -90,7 +91,7 @@ class UNETR(nn.Module):
         self.hidden_size = hidden_size
         self.classification = False
         self.vit = ViT(
-            in_channels=in_channels,
+            in_channels=2560,
             img_size=img_size,
             patch_size=self.patch_size,
             hidden_size=hidden_size,
@@ -110,46 +111,11 @@ class UNETR(nn.Module):
             norm_name=norm_name,
             res_block=res_block,
         )
-        self.encoder2 = UnetrPrUpBlock(
-            spatial_dims=3,
-            in_channels=hidden_size,
-            out_channels=feature_size * 2,
-            num_layer=2,
-            kernel_size=3,
-            stride=1,
-            upsample_kernel_size=2,
-            norm_name=norm_name,
-            conv_block=conv_block,
-            res_block=res_block,
-        )
-        self.encoder3 = UnetrPrUpBlock(
-            spatial_dims=3,
-            in_channels=hidden_size,
-            out_channels=feature_size * 4,
-            num_layer=1,
-            kernel_size=3,
-            stride=1,
-            upsample_kernel_size=2,
-            norm_name=norm_name,
-            conv_block=conv_block,
-            res_block=res_block,
-        )
-        self.encoder4 = UnetrPrUpBlock(
-            spatial_dims=3,
-            in_channels=hidden_size,
-            out_channels=feature_size * 8,
-            num_layer=0,
-            kernel_size=3,
-            stride=1,
-            upsample_kernel_size=2,
-            norm_name=norm_name,
-            conv_block=conv_block,
-            res_block=res_block,
-        )
+
         self.decoder5 = UnetrUpBlock(
             spatial_dims=3,
             in_channels=hidden_size,
-            out_channels=feature_size * 8,
+            out_channels=224,
             kernel_size=3,
             upsample_kernel_size=2,
             norm_name=norm_name,
@@ -157,8 +123,8 @@ class UNETR(nn.Module):
         )
         self.decoder4 = UnetrUpBlock(
             spatial_dims=3,
-            in_channels=feature_size * 8,
-            out_channels=feature_size * 4,
+            in_channels=224,
+            out_channels=80,
             kernel_size=3,
             upsample_kernel_size=2,
             norm_name=norm_name,
@@ -166,8 +132,8 @@ class UNETR(nn.Module):
         )
         self.decoder3 = UnetrUpBlock(
             spatial_dims=3,
-            in_channels=feature_size * 4,
-            out_channels=feature_size * 2,
+            in_channels=80,
+            out_channels=48,
             kernel_size=3,
             upsample_kernel_size=2,
             norm_name=norm_name,
@@ -175,8 +141,17 @@ class UNETR(nn.Module):
         )
         self.decoder2 = UnetrUpBlock(
             spatial_dims=3,
-            in_channels=feature_size * 2,
-            out_channels=feature_size,
+            in_channels=48,
+            out_channels=32,
+            kernel_size=3,
+            upsample_kernel_size=2,
+            norm_name=norm_name,
+            res_block=res_block,
+        )
+        self.decoder1 = UnetrUpBlock(
+            spatial_dims=3,
+            in_channels=32,
+            out_channels=16,
             kernel_size=3,
             upsample_kernel_size=2,
             norm_name=norm_name,
@@ -185,10 +160,10 @@ class UNETR(nn.Module):
         self.out = UnetOutBlock(spatial_dims=3, in_channels=feature_size, out_channels=out_channels)  # type: ignore
 
     def proj_feat(self, x, hidden_size, feat_size):
-        print("before profect:",x.size(), feat_size)
+        # print("before profect:",x.size(), feat_size)
         x = x.view(x.size(0), feat_size[0], feat_size[1], feat_size[2], hidden_size)
         x = x.permute(0, 4, 1, 2, 3).contiguous()
-        print("after project:",x.size())
+        # print("after project:",x.size())
         return x
 
     def load_from(self, weights):
@@ -219,30 +194,25 @@ class UNETR(nn.Module):
             self.vit.norm.bias.copy_(weights["state_dict"]["module.transformer.norm.bias"])
 
     def forward(self, x_in):
-        print("x_in:", x_in.size())
-        # x, features = self.hybrid.extract_features(x_in) 
+        original_resolution_skip = self.encoder1(x_in)
+        x, features = self.hybrid.extract_features(x_in)
+
         # print("after hybrid:",x.size()) # 1,2560,3,3,3
-        x, hidden_states_out = self.vit(x_in)
-        print("after vit:",x.size())
-        enc1 = self.encoder1(x_in)
-        print("enc1:",enc1.size())
-        x2 = hidden_states_out[3]
-        enc2 = self.encoder2(self.proj_feat(x2, self.hidden_size, self.feat_size))
-        print("enc2:",enc2.size())
-        x3 = hidden_states_out[6]
-        enc3 = self.encoder3(self.proj_feat(x3, self.hidden_size, self.feat_size))
-        print("enc3:",enc3.size())
-        x4 = hidden_states_out[9]
-        enc4 = self.encoder4(self.proj_feat(x4, self.hidden_size, self.feat_size))
-        print("enc4:",enc4.size())
-        dec4 = self.proj_feat(x, self.hidden_size, self.feat_size)
-        print("dec4:", dec4.size())
-        dec3 = self.decoder5(dec4, enc4)
-        print("dec3:",dec3.size())
-        dec2 = self.decoder4(dec3, enc3)
-        dec1 = self.decoder3(dec2, enc2)
-        out = self.decoder2(dec1, enc1)
-        logits = self.out(out)
+        x = self.vit(x)
+        # print("after vit:",x.size()) # 27,768
+        x = self.proj_feat(x, hidden_size=self.hidden_size, feat_size=(3,3,3))
+        # print("after project:",x.size()) #  torch.Size([1, 768, 3, 3, 3])
+        x = self.decoder5(x,features[3])
+        # print("after decode5:",x.size()) # torch.Size([1, 224, 6, 6, 6])
+        x = self.decoder4(x, features[2])
+        # print("after decode 4:",x.size()) # torch.Size([1, 80, 12, 12, 12])
+        x = self.decoder3(x, features[1])
+        # print("after decode 3:",x.size()) #torch.Size([1, 48, 24, 24, 24])
+        x = self.decoder2(x, features[0])
+        # print("after decode 2:",x.size()) # torch.Size([1, 32, 48, 48, 48])
+        x = self.decoder1(x, original_resolution_skip)
+        # print("after decode 1:",x.size()) # torch.Size([1, 16, 96, 96, 96])
+        logits = self.out(x)
         return logits
 if __name__ == "__main__":
     device = torch.device("cuda")
