@@ -39,10 +39,10 @@ parser.add_argument(
 parser.add_argument("--data_dir", default="dataset/", type=str, help="dataset directory")
 parser.add_argument("--json_list", default="dataset_0.json", type=str, help="dataset json file")
 parser.add_argument(
-    "--pretrained_model_name", default="UNETR_model_best_acc.pth", type=str, help="pretrained model name"
+    "--pretrained_model_name", default="model.pt", type=str, help="pretrained model name"
 )
 parser.add_argument("--save_checkpoint", action="store_true", help="save checkpoint during training")
-parser.add_argument("--max_epochs", default=5000, type=int, help="max number of training epochs")
+parser.add_argument("--max_epochs", default=1000, type=int, help="max number of training epochs")
 parser.add_argument("--batch_size", default=1, type=int, help="number of batch size")
 parser.add_argument("--sw_batch_size", default=1, type=int, help="number of sliding window batch size")
 parser.add_argument("--optim_lr", default=1e-4, type=float, help="optimization learning rate")
@@ -144,7 +144,7 @@ def main_worker(gpu, args):
 
         if args.resume_ckpt:
             model_dict = torch.load(os.path.join(pretrained_dir, args.pretrained_model_name))
-            model.load_state_dict(model_dict)
+            model.load_state_dict(model_dict["state_dict"])
             print("Use pretrained weights")
 
         if args.resume_jit:

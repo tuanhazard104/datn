@@ -22,12 +22,12 @@ from monai.inferers import sliding_window_inference
 
 parser = argparse.ArgumentParser(description="UNETR segmentation pipeline")
 parser.add_argument(
-    "--pretrained_dir", default="./pretrained_models/", type=str, help="pretrained checkpoint directory"
+    "--pretrained_dir", default="pretrained_models/", type=str, help="pretrained checkpoint directory"
 )
-parser.add_argument("--data_dir", default="/dataset/dataset0/", type=str, help="dataset directory")
+parser.add_argument("--data_dir", default="dataset/", type=str, help="dataset directory")
 parser.add_argument("--json_list", default="dataset_0.json", type=str, help="dataset json file")
 parser.add_argument(
-    "--pretrained_model_name", default="UNETR_model_best_acc.pth", type=str, help="pretrained model name"
+    "--pretrained_model_name", default="model_final.pt", type=str, help="pretrained model name"
 )
 parser.add_argument(
     "--saved_checkpoint", default="ckpt", type=str, help="Supports torchscript or ckpt pretrained checkpoint type"
@@ -53,7 +53,7 @@ parser.add_argument("--roi_y", default=96, type=int, help="roi size in y directi
 parser.add_argument("--roi_z", default=96, type=int, help="roi size in z direction")
 parser.add_argument("--dropout_rate", default=0.0, type=float, help="dropout rate")
 parser.add_argument("--distributed", action="store_true", help="start distributed training")
-parser.add_argument("--workers", default=8, type=int, help="number of workers")
+parser.add_argument("--workers", default=1, type=int, help="number of workers")
 parser.add_argument("--RandFlipd_prob", default=0.2, type=float, help="RandFlipd aug probability")
 parser.add_argument("--RandRotate90d_prob", default=0.2, type=float, help="RandRotate90d aug probability")
 parser.add_argument("--RandScaleIntensityd_prob", default=0.1, type=float, help="RandScaleIntensityd aug probability")
@@ -88,7 +88,8 @@ def main():
             dropout_rate=args.dropout_rate,
         )
         model_dict = torch.load(pretrained_pth)
-        model.load_state_dict(model_dict)
+        print(">>>>>>>>>>>>>>>>>>>>",pretrained_pth)
+        model.load_state_dict(model_dict["state_dict"])
     model.eval()
     model.to(device)
 

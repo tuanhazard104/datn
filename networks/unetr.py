@@ -15,9 +15,9 @@ from typing import Tuple, Union
 import torch
 import torch.nn as nn
 
-from monai.networks.blocks import UnetrBasicBlock, UnetrPrUpBlock, UnetrUpBlock
-from monai.networks.blocks.dynunet_block import UnetOutBlock
-from monai.networks.nets import ViT
+from MONAI.monai.networks.blocks import UnetrBasicBlock, UnetrPrUpBlock, UnetrUpBlock
+from MONAI.monai.networks.blocks.dynunet_block import UnetOutBlock
+from MONAI.monai.networks.nets import ViT
 from EfficientNet_PyTorch_3D.efficientnet_pytorch_3d.model import EfficientNet3D
 
 class UNETR(nn.Module):
@@ -198,7 +198,7 @@ class UNETR(nn.Module):
         x, features = self.hybrid.extract_features(x_in)
 
         # print("after hybrid:",x.size()) # 1,2560,3,3,3
-        x = self.vit(x)
+        x,_ = self.vit(x)
         # print("after vit:",x.size()) # 27,768
         x = self.proj_feat(x, hidden_size=self.hidden_size, feat_size=(3,3,3))
         # print("after project:",x.size()) #  torch.Size([1, 768, 3, 3, 3])
