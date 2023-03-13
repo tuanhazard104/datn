@@ -7,7 +7,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from torchvision.utils import save_image
 
 def np2th(weights, conv=False):
     """Possibly convert HWIO to OIHW."""
@@ -22,11 +21,6 @@ class StdConv2d(nn.Conv2d):
         w = self.weight
         v, m = torch.var_mean(w, dim=[1, 2, 3], keepdim=True, unbiased=False)
         w = (w - m) / torch.sqrt(v + 1e-5)
-        # print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXSTD_CONV2D:\n")
-        # print(f"weight:{w.size()}, bias:{self.bias}, stride:{self.stride}, padding:{self.padding}, dilation:{self.dilation}, groups:{self.groups}")
-        j = F.conv2d(x, w, self.bias, self.stride, self.padding,
-                        self.dilation, self.groups)
-        # print("after StdConv2D: ", j.size()) # ([2, 256, 16, 16])
         return F.conv2d(x, w, self.bias, self.stride, self.padding,
                         self.dilation, self.groups)
 
@@ -122,7 +116,7 @@ class ResNetV2(nn.Module):
         super().__init__()
         width = int(64 * width_factor)
         self.width = width
-        # print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>WIDTH:\n", self.width) # 64
+
         self.root = nn.Sequential(OrderedDict([
             ('conv', StdConv2d(3, width, kernel_size=7, stride=2, bias=False, padding=3)),
             ('gn', nn.GroupNorm(32, width, eps=1e-6)),
@@ -148,12 +142,9 @@ class ResNetV2(nn.Module):
     def forward(self, x):
         features = []
         b, c, in_size, _ = x.size()
-        # print("before root: ", x.size()) # (2,3,256,256)
         x = self.root(x)
-        # print("after root: ", x.size()) # (2,64,128,128)
         features.append(x)
         x = nn.MaxPool2d(kernel_size=3, stride=2, padding=0)(x)
-        # print("after maxpool2D: ", x.size()) # [2, 64, 63, 63]
         for i in range(len(self.body)-1):
             x = self.body[i](x)
             right_size = int(in_size / 4 / (i+1))
@@ -166,5 +157,4 @@ class ResNetV2(nn.Module):
                 feat = x
             features.append(feat)
         x = self.body[-1](x)
-        # print("after body: ", x.size()) # [2, 1024, 16, 16]
         return x, features[::-1]

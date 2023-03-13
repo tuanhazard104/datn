@@ -7,7 +7,8 @@ from scipy import ndimage
 from scipy.ndimage.interpolation import zoom
 from torch.utils.data import Dataset
 import cv2
-
+import sys
+sys.path.append(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn")
 def random_rot_flip(image, label):
     k = np.random.randint(0, 4)
     image = np.rot90(image, k)

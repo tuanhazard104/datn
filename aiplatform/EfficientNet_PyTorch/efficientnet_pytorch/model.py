@@ -67,6 +67,7 @@ class MBConvBlock(nn.Module):
         # Depthwise convolution phase
         k = self._block_args.kernel_size
         s = self._block_args.stride
+        # print(">>>>>>>>>>>>>>>>>>",s)
         Conv2d = get_same_padding_conv2d(image_size=image_size)
         self._depthwise_conv = Conv2d(
             in_channels=oup, out_channels=oup, groups=oup,  # groups makes it depthwise
@@ -217,6 +218,8 @@ class EfficientNet(nn.Module):
 
         # set activation to memory efficient swish by default
         self._swish = MemoryEfficientSwish()
+        # for i in range(2):
+        #     print(">>>>>>>>>>>>>>>>>>\n",self._blocks[i])
 
     def set_swish(self, memory_efficient=True):
         """Sets swish function as memory efficient (for training) or standard (for export).
@@ -295,10 +298,11 @@ class EfficientNet(nn.Module):
             drop_connect_rate = self._global_params.drop_connect_rate
             if drop_connect_rate:
                 drop_connect_rate *= float(idx) / len(self._blocks)  # scale drop connect_rate
+            # print("before block:",x.size())
             x = block(x, drop_connect_rate=drop_connect_rate)
             if idx in [3,10,17,37]:
                 features.append(x)
-                # print(">>>",x.size())
+            print(">>>",x.size(),idx)
 
 
         # Head
@@ -347,6 +351,8 @@ class EfficientNet(nn.Module):
         """
         cls._check_model_name_is_valid(model_name)
         blocks_args, global_params = get_model_params(model_name, override_params)
+        # for stride in range(len(blocks_args)):
+        #     print(blocks_args[stride].stride)
         model = cls(blocks_args, global_params)
         model._change_in_channels(in_channels)
         return model

@@ -1,7 +1,7 @@
 from efficientnet_pytorch import EfficientNet
 import torch
-model = EfficientNet.from_pretrained('efficientnet-b7')
-img = torch.rand(1,3,224,224)
+model = EfficientNet.from_name('efficientnet-b7')
+img = torch.rand(1,3,96,96)
 # ... image preprocessing as in the classification example ...
 print(img.size()) # torch.Size([1, 3, 224, 224])
 

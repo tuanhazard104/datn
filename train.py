@@ -5,17 +5,19 @@ import random
 import numpy as np
 import torch
 import torch.backends.cudnn as cudnn
-from networks.vit_seg_modeling import VisionTransformer as ViT_seg
-from networks.vit_seg_modeling import CONFIGS as CONFIGS_ViT_seg
-from networks.axialnet import MedT
-from networks.segformer import SegFormer
-from trainer import trainer_synapse
+from networks.eff_transunet import EffTransUNet
+from networks.transunet import TransUNet
+from networks.eff_transunet_3d import EffTransUNet3D
+from networks.config.config2d.configs import get_EFNB7_config, get_r50_b16_config
+from trainer2d import trainer_synapse as trainer_2d
+from trainer3d import run_training as trainer_3d
 parser = argparse.ArgumentParser()
-parser.add_argument('--model_name', type=str, default="TransUNet", help="model name: TransUNet/MedT/SegFormer")
+parser.add_argument('--volume', action="store_true", help='add this argument to train with 3d data')
+parser.add_argument('--model_name', type=str, default="EffTransUNet", help="model name: EffTransUNet or TransUNet")
 parser.add_argument('--root_path', type=str,
-                    default='datasets/raw_data/train_npz', help='root dir for data')
+                    default='datasets/data_2d/train_npz', help='root dir for data')
 parser.add_argument('--output_dir', type=str,
-                    default="runs/transunet")
+                    default="runs")
 parser.add_argument('--dataset', type=str,
                     default='Synapse', help='experiment_name')
 parser.add_argument('--list_dir', type=str,
@@ -37,14 +39,9 @@ parser.add_argument('--img_size', type=int,
                     default=224, help='input patch size of network input')
 parser.add_argument('--seed', type=int,
                     default=1234, help='random seed')
-parser.add_argument('--n_skip', type=int,
-                    default=4, help='using number of skip-connect, default is num')
-parser.add_argument('--vit_name', type=str,
-                    default='EFN-B7', help='select one vit model')
-parser.add_argument('--vit_patches_size', type=int,
-                    default=16, help='vit_patches_size, default is 16')
-parser.add_argument('--resume_training', action="store_true", help='using pretrained model')
 
+parser.add_argument('--resume_training', action="store_true", help='using pretrained model')
+parser.add_argument("--val_every", default=100, type=int, help="validation frequency")
 args = parser.parse_args()
 
 CUDA_VISIBLE_DEVICES=0
@@ -68,48 +65,51 @@ if __name__ == "__main__":
 
     if not os.path.exists(args.output_dir):
         os.makedirs(args.output_dir)
-    config_vit = CONFIGS_ViT_seg[args.vit_name]
-    config_vit.n_classes = args.num_classes
-    config_vit.n_skip = args.n_skip
+
     checkpoint = None
-    if args.model_name == "TransUNet":
-        net = ViT_seg(config_vit, img_size=args.img_size, num_classes=config_vit.n_classes).cuda()
+    if args.volume:
+        args.output_dir = args.output_dir + "3d"
+        net = EffTransUNet3D(
+        in_channels=1,
+        out_channels=args.num_classes,
+        img_size=(96,96,96),
+        feature_size=16,
+        hidden_size=768,
+        mlp_dim=3072,
+        num_heads=12,
+        pos_embed="perceptron",
+        norm_name="instance",
+        conv_block=True,
+        res_block=True,
+        dropout_rate=0.0).cuda()
+        args.pretrained_model = ""
+        checkpoint = torch.load(args.pretrained_model)
+        net.load_state_dict(checkpoint["state_dict"])
+        trainer_3d(
+                    model=net,
+                    acc_func=dice_acc,
+                    args=args,
+                    model_inferer=model_inferer,
+                    scheduler=scheduler,
+                    start_epoch=start_epoch,
+                    post_label=post_label,
+                    post_pred=post_pred)
+
+        
+    if args.model_name == "EffTransUNet":
+        config_vit = get_EFNB7_config()
+        net = EffTransUNet(config_vit, img_size=args.img_size, num_classes=args.num_classes).cuda()
         args.pretrained_model = "runs/epoch_70_transeffunet7_final.pth" 
-        # net.load_from(weights=np.load(config_vit.pretrained_path))
-
-    elif args.model_name == "SegFormer":
-        net = SegFormer(num_classes=args.num_classes,image_size=args.img_size).cuda()
-
-    elif args.model_name == "MISSFormer":
-        from networks.MISSFormer import MISSFormer
-        net = MISSFormer(num_classes=args.num_classes).cuda()
-        args.pretrained_model = "runs/epoch_99_miss.pth"
-    elif args.model_name == "SwinUNet":
-        from networks.swin_vision_transformer import SwinUnet
-        from aiplatform.Swin_Unet.config import get_config
-        args.cfg = "aiplatform/Swin_Unet/configs/swin_tiny_patch4_window7_224_lite.yaml"
-        config = get_config()
-        net = SwinUnet(config, img_size=args.img_size, num_classes=args.num_classes).cuda()
-    elif args.model_name == "pvtv2":
-        from aiplatform.pvtv2.pvtv2 import PyramidVisionTransformerV2 as PVT
-        net = PVT(num_classes=args.num_classes).cuda()
-    elif args.model_name == "MyNetworks":
-        from networks.my_networks import MyNetworks
-        args.pretrained_model = "runs/epoch_66.pth"
-        net = MyNetworks(num_classes=args.num_classes).cuda()
+        if args.resume_training:
+            checkpoint=torch.load(args.pretrained_model)
+            net.load_state_dict(checkpoint)
     
-
     else:
-        args.img_size = 128
-        net = MedT(img_size = args.img_size, imgchan = 1, num_classes = args.num_classes).cuda()
+        config_vit = get_r50_b16_config()
+        net = TransUNet(config_vit, img_size=args.img_size, num_classes=args.num_classes).cuda()
+        net.load_from(weights=np.load(config_vit.pretrained_path))
 
-    if args.resume_training:
-        checkpoint=torch.load(args.pretrained_model)
-        net.load_state_dict(checkpoint)
-
-    trainer = {'Synapse': trainer_synapse,}
-
-    trainer[dataset_name](args, net, args.output_dir, checkpoint=checkpoint)
+    trainer_2d(args, net, args.output_dir, checkpoint=checkpoint)
 
 
 

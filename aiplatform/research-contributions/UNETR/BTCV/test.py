@@ -61,7 +61,7 @@ parser.add_argument("--RandShiftIntensityd_prob", default=0.1, type=float, help=
 parser.add_argument("--pos_embed", default="perceptron", type=str, help="type of position embedding")
 parser.add_argument("--norm_name", default="instance", type=str, help="normalization layer type in decoder")
 
-
+import matplotlib.pyplot as plt
 def main():
     args = parser.parse_args()
     args.test_mode = True
@@ -109,6 +109,9 @@ def main():
             mean_dice = np.mean(dice_list_sub)
             print("Mean Organ Dice: {}".format(mean_dice))
             dice_list_case.append(mean_dice)
+            # plot img
+           # plt.imshow(torch.argmax(val_outputs, dim=1).detach().cpu()[0, :, :, slice_map[img_name]])
+
         print("Overall Mean Dice: {}".format(np.mean(dice_list_case)))
 
 

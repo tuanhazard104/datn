@@ -1,5 +1,5 @@
 import sys
-sys.path.append('/hdd/tuannca/datn/tuannca181816')
+sys.path.append(r'E:\tai_lieu_hoc_tap\tdh\tuannca_datn')
 import argparse
 import logging
 import os
@@ -12,22 +12,22 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 from datasets.dataset_synapse import Synapse_dataset
 from utils import test_single_volume
-from networks.vit_seg_modeling import VisionTransformer as ViT_seg
+from aiplatform.TransUNet.networks.vit_seg_modeling import VisionTransformer as ViT_seg
 from networks.vit_seg_modeling import CONFIGS as CONFIGS_ViT_seg
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--volume_path', type=str,
-                    default='data/RawData/test_vol_h5', help='root dir for validation volume data')  # for acdc volume_path=root_dir
+                    default='datasets/raw_data/test_vol_h5', help='root dir for validation volume data')  # for acdc volume_path=root_dir
 parser.add_argument('--dataset', type=str,
                     default='Synapse', help='experiment_name')
 parser.add_argument('--num_classes', type=int,
                     default=9, help='output channel of network')
 parser.add_argument('--list_dir', type=str,
-                    default='data/RawData/lists_Synapse', help='list dir')
+                    default='datasets/lists_Synapse', help='list dir')
 
 parser.add_argument('--max_iterations', type=int,default=20000, help='maximum epoch number to train')
 parser.add_argument('--max_epochs', type=int, default=150, help='maximum epoch number to train')
-parser.add_argument('--batch_size', type=int, default=8,
+parser.add_argument('--batch_size', type=int, default=4,
                     help='batch_size per gpu')
 parser.add_argument('--img_size', type=int, default=224, help='input patch size of network input')
 parser.add_argument('--is_savenii', action="store_true", help='whether to save results during inference')
@@ -122,7 +122,8 @@ if __name__ == "__main__":
     snapshot = os.path.join(snapshot_path, 'best_model.pth')
     if not os.path.exists(snapshot): snapshot = snapshot.replace('best_model', 'epoch_'+str(args.max_epochs-1))
     snapshot = "aiplatform/project_TransUNet/model/TU_Synapse224/TU_pretrain_R50-ViT-B_16_skip3_epo150_bs8_224/epoch_149.pth"
-    net.load_state_dict(torch.load(snapshot))
+    net.load_state_dict(torch.load(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\pretrain_model\transunet\epoch_149.pth"))
+    # net.load_from(weights=np.load('pretrain_model/transunet/R50_ViT-B_16.npz'))
     snapshot_name = snapshot_path.split('/')[-1]
 
     log_folder = './test_log/test_log_' + args.exp
@@ -133,7 +134,7 @@ if __name__ == "__main__":
     logging.info(snapshot_name)
 
     if args.is_savenii:
-        args.test_save_dir = args.test_save_dir+"/prediction"
+        args.test_save_dir = args.test_save_dir+"/predictionTransUNet_pth"
         test_save_path = os.path.join(args.test_save_dir, args.exp, snapshot_name)
         os.makedirs(test_save_path, exist_ok=True)
     else:

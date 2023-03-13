@@ -383,11 +383,12 @@ class BlockDecoder(object):
             if len(splits) >= 2:
                 key, value = splits[:2]
                 options[key] = value
-
+        # print("option:", options)
+        # print(int(options['s'][0]))
         # Check stride
         assert (('s' in options and len(options['s']) == 1) or
                 (len(options['s']) == 2 and options['s'][0] == options['s'][1]))
-
+        # print(int(options['s'][0]))
         return BlockArgs(
             num_repeat=int(options['r']),
             kernel_size=int(options['k']),

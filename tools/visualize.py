@@ -50,50 +50,55 @@ colab_log2 = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\log\events.out.tfevents
 colab_log3 = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\events.out.tfevents.16768colab69672.54ca5bfa2118"
 colab_log87 = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\transunet\log87\log87_last.6d5db9be69a6"
 missformer99 = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\missformer99.cfcf99e53b24"
+eff3d = r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\transeffunet3d\research-contributions\UNETR\BTCV\runs\xxxx.cf9c249c696b"
 summary = summary_iterator(missformer99)
 for i,event in enumerate(summary): # moi event co mot value
     for value in event.summary.value:
-        if value.tag == "info/total_loss": # loss_ce
-            if value.HasField('simple_value'):
-                iters.append(i)
-                total_loss.append(value.simple_value)
-        elif value.tag == "info/loss_ce":
-            if value.HasField('simple_value'):
-                # iters.append(i)
-                ce_loss.append(value.simple_value)
-        elif value.tag == "info/loss_tversky":
-            if value.HasField('simple_value'):
-                # iters.append(i)
-                tversky_loss.append(value.simple_value)
-        elif value.tag == "info/loss_dice":
-            if value.HasField('simple_value'):
-                # iters.append(i)
-                dice_loss.append(value.simple_value)
-print("length of iters: ", len(iters))
-print("length of total_loss: ", len(total_loss))
-print("length of ce_loss:",len(ce_loss))
-print("len of tversky loss:",len(tversky_loss))
-print("len of dice loss:",len(dice_loss))
-plt.figure()
-plt.xlabel('Iters')
-plt.ylabel('Total Loss')
-plt.plot(iters, total_loss)
-plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\missformer99_total.jpg")
-
-plt.figure()
-plt.xlabel('Iters')
-plt.ylabel('CE Loss')
-plt.plot(iters, ce_loss)
-plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\missformer99_ce.jpg")
+        if value.tag == "train_loss":
+            print(value.tag)
+        break
+    break
+        # if value.tag == "info/total_loss": # loss_ce
+        #     if value.HasField('simple_value'):
+        #         iters.append(i)
+        #         total_loss.append(value.simple_value)
+        # elif value.tag == "info/loss_ce":
+        #     if value.HasField('simple_value'):
+        #         # iters.append(i)
+        #         ce_loss.append(value.simple_value)
+        # elif value.tag == "info/loss_tversky":
+        #     if value.HasField('simple_value'):
+        #         # iters.append(i)
+        #         tversky_loss.append(value.simple_value)
+        # elif value.tag == "info/loss_dice":
+        #     if value.HasField('simple_value'):
+        #         # iters.append(i)
+        #         dice_loss.append(value.simple_value)
+# print("length of iters: ", len(iters))
+# print("length of total_loss: ", len(total_loss))
+# print("length of ce_loss:",len(ce_loss))
+# print("len of tversky loss:",len(tversky_loss))
+# print("len of dice loss:",len(dice_loss))
+# plt.figure()
+# plt.xlabel('Iters')
+# plt.ylabel('Total Loss')
+# plt.plot(iters, total_loss)
+# plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\missformer99_total.jpg")
 
 # plt.figure()
 # plt.xlabel('Iters')
-# plt.ylabel('Tversky Loss')
-# plt.plot(iters, tversky_loss)
-# plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\tversky_loss_colab87.jpg")
+# plt.ylabel('CE Loss')
+# plt.plot(iters, ce_loss)
+# plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\missformer99_ce.jpg")
 
-plt.figure()
-plt.xlabel('Iters')
-plt.ylabel('Dice Loss')
-plt.plot(iters, dice_loss)
-plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\missformer99_dice.jpg")
+# # plt.figure()
+# # plt.xlabel('Iters')
+# # plt.ylabel('Tversky Loss')
+# # plt.plot(iters, tversky_loss)
+# # plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\tversky_loss_colab87.jpg")
+
+# plt.figure()
+# plt.xlabel('Iters')
+# plt.ylabel('Dice Loss')
+# plt.plot(iters, dice_loss)
+# plt.savefig(r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\missformer99_dice.jpg")

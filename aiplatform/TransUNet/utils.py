@@ -4,7 +4,6 @@ from medpy import metric
 from scipy.ndimage import zoom
 import torch.nn as nn
 import SimpleITK as sitk
-from aiplatform.swin_unetr.MONAI.monai.losses import TverskyLoss
 
 class DiceLoss(nn.Module):
     def __init__(self, n_classes):
@@ -48,31 +47,6 @@ class DiceLoss(nn.Module):
             loss += dice * weight[i]
         return loss / self.n_classes
 
-class Tversky_Loss(nn.Module):
-    def __init__(self, n_classes):
-        super(Tversky_Loss, self).__init__()
-        self.n_classes = n_classes # n_classes = 9
-        self.tversky = TverskyLoss()
-
-    def _one_hot_encoder(self, input_tensor):
-        tensor_list = []
-        for i in range(self.n_classes):
-            temp_prob = input_tensor == i  # * torch.ones_like(input_tensor)
-            tensor_list.append(temp_prob.unsqueeze(1))
-        output_tensor = torch.cat(tensor_list, dim=1)
-        return output_tensor.float()
-    def forward(self, inputs, target, softmax=False):
-        if softmax:
-            inputs = torch.softmax(inputs, dim=1)
-        target = self._one_hot_encoder(target)
-        print("after one hot:",target.size())
-        # for i in range(0, self.n_classes):
-        #     tversky_loss = self.tversky(inputs[:, i], target[:, i])
-        #     loss += tversky_loss
-        # return loss/self.n_classes
-        loss = self.tversky(inputs,target)
-        return loss
-
 def calculate_metric_percase(pred, gt):
     pred[pred > 0] = 1
     gt[gt > 0] = 1
@@ -89,8 +63,6 @@ def calculate_metric_percase(pred, gt):
 def test_single_volume(image, label, net, classes, patch_size=[256, 256], test_save_path=None, case=None, z_spacing=1):
     image, label = image.squeeze(0).cpu().detach().numpy(), label.squeeze(0).cpu().detach().numpy()
     if len(image.shape) == 3: # image.shape = 148,512,512
-        print("len(image.shape) = 3", image.shape)
-        print("label.shape ", label.shape)
         prediction = np.zeros_like(label)
         for ind in range(image.shape[0]):
             slice = image[ind, :, :]

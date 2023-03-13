@@ -24,11 +24,17 @@ class ConvertData():
             
             image = f["image"]
             label = f["label"]
-            for j in range(image.shape[0]):
-                img_arr = np.array(image)[j,:,:]
-                label_arr = np.array(label)[j,:,:]
-                plt.imsave(self.output_dir+"/img/"+f"case{case}_slice{j:03d}.jpg", img_arr, cmap='gray')
-                plt.imsave(self.output_dir+"/labelcol/"+f"case{case}_slice{j:03d}.jpg", label_arr, cmap='gray')
+            print(image.shape)
+            break
+            # for j in range(image.shape[0]):
+            #     img_arr = np.array(image)[j,:,:]
+            #     label_arr = np.array(label)[j,:,:]
+            #     plt.imsave(self.output_dir+"/img/"+f"case{case}_slice{j:03d}.jpg", img_arr, cmap='gray')
+            #     plt.imsave(self.output_dir+"/labelcol/"+f"case{case}_slice{j:03d}.jpg", label_arr, cmap='gray')
+            # nifti_file_img = nib.Nifti1Image(image , np.eye(4))
+            # nifti_file_label = nib.Nifti1Image(label , np.eye(4))
+            # nib.save(nifti_file_img, self.output_dir+"/images"+ f"/img{case}.nii.gz")
+            # nib.save(nifti_file_label, self.output_dir+"/labels"+ f"/label{case}.nii.gz")
 
                 
     def convert_npz(self):
@@ -51,14 +57,16 @@ class ConvertData():
             
             data = nib.load(self.files[i]).get_fdata()
             *_, num_slices, num_channels = data.shape
+            print(filename_split_nii_gz, data.shape)
             for channel in range(num_channels):
                 volume = data[..., channel]
                 volume = np.array(volume)
                 # print(min(volume[1]))
                 # print(volume.shape)
-                slice_data = np.stack(3 * [volume], axis=2)
+                # slice_data = np.stack(3 * [volume], axis=2)
                 channel_dir = os.path.join(self.output_dir , f'{filename_split_nii_gz}_channel_{channel}.jpg')
                 plt.imsave(channel_dir, volume, cmap='gray')
+                # cv2.imwrite(channel_dir,slice_data)
                 
     def resize(self):
         for i in range(len(self.files)):
@@ -67,8 +75,8 @@ class ConvertData():
             img_128 = cv2.resize(img, (128, 128))
             cv2.imwrite(os.path.join(self.output_dir, basename), img_128)
 
-converter = ConvertData(input_dir=r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\transunet\prediction\TU_Synapse224\MyNetworks",
-                        output_dir=r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\transunet\prediction\TU_Synapse224\MyNetworks\converted55",
+converter = ConvertData(input_dir=r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\transunet\predictionTransUNet_pth\TU_Synapse224\TU_pretrain_R50-ViT-B_16_skip3_20k_epo150_bs4_224",
+                        output_dir=r"E:\tai_lieu_hoc_tap\tdh\tuannca_datn\runs\transunet\predictionTransUNet_pth\TU_Synapse224\TU_pretrain_R50-ViT-B_16_skip3_20k_epo150_bs4_224\converted",
                         sufflex="nii.gz")
 
 converter.convert_nii()
