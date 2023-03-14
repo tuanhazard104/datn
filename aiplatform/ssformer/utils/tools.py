@@ -1,5 +1,5 @@
 import models
-import utils
+import tester
 # from utils import ISIC2018
 from torch.utils.data import DataLoader
 from tqdm import tqdm

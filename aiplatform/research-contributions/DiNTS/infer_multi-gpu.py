@@ -38,7 +38,7 @@ from torch.nn.parallel import DistributedDataParallel
 # from torch.utils.data.distributed import DistributedSampler
 from torch.utils.tensorboard import SummaryWriter
 from transforms import creating_transforms_testing, str2aug
-from utils import parse_monai_specs  # parse_monai_transform_specs,
+from tester import parse_monai_specs  # parse_monai_transform_specs,
 
 import monai
 from monai.data import (

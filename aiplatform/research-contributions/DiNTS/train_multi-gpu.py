@@ -34,7 +34,7 @@ from torch import nn
 from torch.nn.parallel import DistributedDataParallel
 from torch.utils.tensorboard import SummaryWriter
 from transforms import creating_transforms_training, creating_transforms_validation
-from utils import parse_monai_specs
+from tester import parse_monai_specs
 
 import monai
 from monai.data import (

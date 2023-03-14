@@ -15,9 +15,9 @@ import cv2
 from matplotlib import pyplot as plt
 import numpy as np
 import torch
-from networks.unetr import UNETR
-from trainer import dice
-from utils.data_utils import get_loader
+from networks.eff_transunet_3d import EffTransUNet3D
+from trainer3d import dice
+from utils3d.data_utils import get_loader
 import nibabel as nib
 from monai.inferers import sliding_window_inference
 
@@ -61,20 +61,6 @@ parser.add_argument("--RandScaleIntensityd_prob", default=0.1, type=float, help=
 parser.add_argument("--RandShiftIntensityd_prob", default=0.1, type=float, help="RandShiftIntensityd aug probability")
 parser.add_argument("--pos_embed", default="perceptron", type=str, help="type of position embedding")
 parser.add_argument("--norm_name", default="instance", type=str, help="normalization layer type in decoder")
-slice_map = {
-    "img0008.nii.gz": 124,
-    "img0022.nii.gz": 100,
-    "img0038.nii.gz": 74,
-    "img0036.nii.gz": 152,
-    "img0032.nii.gz": 111,
-    "img0002.nii.gz": 93,
-    "img0029.nii.gz": 79,
-    "img0003.nii.gz": 126,
-    "img0001.nii.gz": 102,
-    "img0004.nii.gz": 94,
-    "img0025.nii.gz": 69,
-    "img0035.nii.gz": 68,
-}
 
 def calculate_metric_percase(pred, gt):
     # print("pred, gt:",pred.shape, gt.shape, pred.sum(), gt.sum()) # (148, 512, 512) (148, 512, 512)
@@ -101,22 +87,12 @@ def main():
     if args.saved_checkpoint == "torchscript":
         model = torch.jit.load(pretrained_pth)
     elif args.saved_checkpoint == "ckpt":
-        model = UNETR(
-            in_channels=args.in_channels,
-            out_channels=args.out_channels,
-            img_size=(args.roi_x, args.roi_y, args.roi_z),
-            feature_size=args.feature_size,
-            hidden_size=args.hidden_size,
-            mlp_dim=args.mlp_dim,
-            num_heads=args.num_heads,
-            pos_embed=args.pos_embed,
-            norm_name=args.norm_name,
-            conv_block=True,
-            res_block=True,
-            dropout_rate=args.dropout_rate,
-        )
+        model = EffTransUNet3D(
+        in_channels=1,
+        out_channels=args.num_classes,
+        img_size=(96,96,96)).cuda()
+
         model_dict = torch.load(pretrained_pth)
-        print(">>>>>>>>>>>>>>>>>>>>",pretrained_pth)
         model.load_state_dict(model_dict["state_dict"])
     model.eval()
     model.to(device)
@@ -152,7 +128,7 @@ def main():
             metric_list = 0.0 #medpy
             metric_i = []
             hd = []
-            for i in range(1, 14):
+            for i in range(1, args.num_classes):
                 organ_Dice = dice(val_outputs[0] == i, val_labels[0] == i)
                 metric_i.append(calculate_metric_percase(val_outputs[0] == i, val_labels[0] == i)) #medpy
                 print(organ_Dice, metric_i[i-1][0], metric_i[i-1][1])
@@ -166,8 +142,8 @@ def main():
             dice_list_case.append(mean_dice)
             hd95_list_case.append(mean_hd)
         metric_list = metric_list / 12
-        for i in range(1, 14):
-            print('Mean class %d mean_dice %f mean_hd95 %f' % (i, metric_list[i-1][0], metric_list[i-1][1]))
+        # for i in range(1, 14):
+        #     print('Mean class %d mean_dice %f mean_hd95 %f' % (i, metric_list[i-1][0], metric_list[i-1][1]))
         performance = np.mean(metric_list, axis=0)[0]
         mean_hd95 = np.mean(metric_list, axis=0)[1]
         print('Testing performance in best val model: mean_dice : %f mean_hd95 : %f' % (performance, mean_hd95))

@@ -10,11 +10,6 @@ from ..MONAI.monai.networks.nets import ViT
 from cnn_backbone.efficientnet_pytorch_3d.model import EfficientNet3D
 
 class EffTransUNet3D(nn.Module):
-    """
-    UNETR based on: "Hatamizadeh et al.,
-    UNETR: Transformers for 3D Medical Image Segmentation <https://arxiv.org/abs/2103.10504>"
-    """
-
     def __init__(
         self,
         in_channels: int,

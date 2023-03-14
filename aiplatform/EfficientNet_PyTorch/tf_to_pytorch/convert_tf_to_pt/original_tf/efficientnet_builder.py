@@ -27,7 +27,7 @@ import six
 import tensorflow.compat.v1 as tf
 
 import efficientnet_model
-import utils
+import tester
 MEAN_RGB = [0.485 * 255, 0.456 * 255, 0.406 * 255]
 STDDEV_RGB = [0.229 * 255, 0.224 * 255, 0.225 * 255]
 
@@ -195,7 +195,7 @@ def efficientnet(width_coefficient=None,
       relu_fn=tf.nn.swish,
       # The default is TPU-specific batch norm.
       # The alternative is tf.layers.BatchNormalization.
-      batch_norm=utils.TpuBatchNormalization,  # TPU-specific requirement.
+      batch_norm=tester.TpuBatchNormalization,  # TPU-specific requirement.
       use_se=True,
       clip_projection_output=False)
   return global_params
@@ -264,7 +264,7 @@ def build_model(images,
   if not training or fine_tuning:
     if not override_params:
       override_params = {}
-    override_params['batch_norm'] = utils.BatchNormalization
+    override_params['batch_norm'] = tester.BatchNormalization
     if fine_tuning:
       override_params['relu_fn'] = functools.partial(swish, use_native=False)
   blocks_args, global_params = get_model_params(model_name, override_params)

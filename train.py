@@ -72,28 +72,11 @@ if __name__ == "__main__":
         net = EffTransUNet3D(
         in_channels=1,
         out_channels=args.num_classes,
-        img_size=(96,96,96),
-        feature_size=16,
-        hidden_size=768,
-        mlp_dim=3072,
-        num_heads=12,
-        pos_embed="perceptron",
-        norm_name="instance",
-        conv_block=True,
-        res_block=True,
-        dropout_rate=0.0).cuda()
+        img_size=(96,96,96)).cuda()
         args.pretrained_model = ""
         checkpoint = torch.load(args.pretrained_model)
         net.load_state_dict(checkpoint["state_dict"])
-        trainer_3d(
-                    model=net,
-                    acc_func=dice_acc,
-                    args=args,
-                    model_inferer=model_inferer,
-                    scheduler=scheduler,
-                    start_epoch=start_epoch,
-                    post_label=post_label,
-                    post_pred=post_pred)
+        trainer_3d(model=net, args=args)
 
         
     if args.model_name == "EffTransUNet":

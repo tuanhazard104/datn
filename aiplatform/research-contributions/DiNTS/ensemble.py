@@ -34,7 +34,7 @@ from scipy import ndimage as ndi
 
 # from monai.utils.enums import InverseKeys
 from transforms import creating_transforms_ensemble, str2aug
-from utils import keep_largest_cc, parse_monai_specs  # parse_monai_transform_specs,
+from tester import keep_largest_cc, parse_monai_specs  # parse_monai_transform_specs,
 
 import monai
 from monai.data import (
