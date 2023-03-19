@@ -1,0 +1,64 @@
+
+temp/
+videos/
+runs/
+model/
+weights/
+trained_model/
+pretrained_model/
+test_log/
+
+*.engine
+__*/
+
+*__pycache__/
+
+__pycache__
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Pyre type checker
+.pyre/
+.vscode/settings.json
+
+# Video files
+*.mp4
+*.avi
+*.MOV
+
+# Weight files
+*.pt
+*.pth
+*.pth.tar
+*.weights
+*.jpg
+*.png
+*.npz
+*.h5
+*.nii
+*.gz
+*.zip
+*.aiserver
+*.Y530
+# Others
+__pycache__
+.vscode
+*ipynb
+*.pyc
